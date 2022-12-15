@@ -8,6 +8,5 @@ export class Category {
     this.id = id;
     this.categoryName = categoryName;
     this.available = available;
-
   }
 }
