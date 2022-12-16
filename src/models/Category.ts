@@ -1,11 +1,11 @@
-export class Category {
-  id: string;
+import { BaseEntity } from './BaseEntity';
+
+export class Category extends BaseEntity {
   categoryName: string;
   available: boolean;
-  // items:Item[]=[];
 
-  constructor(id: string, categoryName: string, available: boolean) {
-    this.id = id;
+  constructor(categoryName: string, available: boolean) {
+    super();
     this.categoryName = categoryName;
     this.available = available;
   }

@@ -1,12 +1,8 @@
 import { Person } from './Person';
 import { Roles } from './enum/Roles';
 import { Genders } from './enum/Genders';
-import { Login } from './Login';
 
-export class Employee extends Person {
-  public salary: number;
-  public isCurrent: boolean;
-  public login: Login;
+export class Customer extends Person {
   constructor(
     firstName: string,
     lastName: string,
@@ -17,7 +13,6 @@ export class Employee extends Person {
     roles: Roles,
     dateOfBirth: Date,
     primaryAddressIndex: number,
-    login: Login,
   ) {
     super();
     this.firstName = firstName;
@@ -29,6 +24,5 @@ export class Employee extends Person {
     this.roles = roles;
     this.dateOfBirth = dateOfBirth;
     this.primaryAddressIndex = primaryAddressIndex;
-    this.login = { ...login };
   }
 }

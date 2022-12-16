@@ -1,26 +1,28 @@
-export class Item {
-  id: string;
+import { BaseEntity } from './BaseEntity';
+import { Category } from './Category';
+
+export class Item extends BaseEntity {
   itemName: string;
   description: string;
   available: boolean;
-  category_id: string[];
+  category: Category[];
   priceAmount: number[];
   sellingAmount: number[];
 
   constructor(
-    id: string,
     itemName: string,
     description: string,
     available: boolean,
-    category_id: string[],
+    category: Category[],
     priceAmount: number[],
     sellingAmount: number[],
   ) {
-    this.id = id;
+    super();
+
     this.itemName = itemName;
     this.description = description;
     this.available = available;
-    this.category_id = category_id;
+    this.category = [...category];
     this.priceAmount = priceAmount;
     this.sellingAmount = sellingAmount;
   }
