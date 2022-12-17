@@ -1,12 +1,25 @@
-import { Schema, InferSchemaType } from 'mongoose';
+import { Prop, Schema } from '@nestjs/mongoose';
+import { BaseSchema } from './BaseSchema';
 
-const schema = new Schema({
-  authCode: { type: String, required: false },
-  userID: { type: String, required: false },
-  passCode: { type: String, required: true },
-  userName: { type: String, required: true },
-  active: { type: Boolean, require: true },
-});
+export type LoginDocument = Login & Document;
 
-export type Login = InferSchemaType<typeof schema>;
-export const LoginImpl = { name: 'Login', schema };
+@Schema()
+export class Login {
+  @Prop({ required: false })
+  authCode: string;
+
+  @Prop({ required: false })
+  userID: string;
+
+  @Prop({ required: true, minlength: 8, maxlength: 50 })
+  passcode: string;
+
+  @Prop({ required: true, unique: true, minlength: 8, maxlength: 50 })
+  userName: string;
+
+  @Prop({ required: true })
+  active: boolean;
+}
+
+export const schema = BaseSchema.createForClass(Login);
+export const LoginImpl = { name: Login.name, schema };
