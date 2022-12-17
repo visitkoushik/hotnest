@@ -1,29 +1,13 @@
-import { BaseEntity } from './BaseEntity';
-import { Category } from './Category';
+import { Schema, InferSchemaType, Types } from 'mongoose';
 
-export class Item extends BaseEntity {
-  itemName: string;
-  description: string;
-  available: boolean;
-  category: Category[];
-  priceAmount: number[];
-  sellingAmount: number[];
+const schema = new Schema({
+  itemName: { type: String, required: true },
+  description: { type: String, required: false },
+  category_ids: { type: [String], required: true },
+  priceAmount: { type: String, required: true },
+  sellingAmount: { type: String, required: true },
+  available: { type: Boolean, require: true },
+});
 
-  constructor(
-    itemName: string,
-    description: string,
-    available: boolean,
-    category: Category[],
-    priceAmount: number[],
-    sellingAmount: number[],
-  ) {
-    super();
-
-    this.itemName = itemName;
-    this.description = description;
-    this.available = available;
-    this.category = [...category];
-    this.priceAmount = priceAmount;
-    this.sellingAmount = sellingAmount;
-  }
-}
+export type Item = InferSchemaType<typeof schema>;
+export const ItemImpl = { name: 'Item', schema };

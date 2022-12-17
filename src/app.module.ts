@@ -8,6 +8,8 @@ import { EmployeeModule } from './modules/employee/employee.module';
 import { ItemModule } from './modules/item/item.module';
 import { LoginRegisterModule } from './modules/login/login-register.module';
 
+import { MongooseModule } from '@nestjs/mongoose';
+// mongodb+srv://hotnest:Passw0rd2022@cluster0.9fdjzyb.mongodb.net/?retryWrites=true&w=majority
 @Module({
   imports: [
     CategoryModule,
@@ -16,6 +18,9 @@ import { LoginRegisterModule } from './modules/login/login-register.module';
     CustomerModule,
     EmployeeModule,
     BillingModule,
+    MongooseModule.forRoot(
+      'mongodb+srv://hotnest:D0Ou3CmA0ouah0r2@cluster-hotnet.qtxxdxy.mongodb.net/test?retryWrites=true&w=majority',
+    ),
   ],
   controllers: [AppController],
   providers: [AppService],

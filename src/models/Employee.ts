@@ -1,34 +1,22 @@
-import { Person } from './Person';
-import { Roles } from './enum/Roles';
+import { Schema, InferSchemaType } from 'mongoose';
 import { Genders } from './enum/Genders';
+import { Roles } from './enum/Roles';
 import { Login } from './Login';
 
-export class Employee extends Person {
-  public salary: number;
-  public isCurrent: boolean;
-  public login: Login;
-  constructor(
-    firstName: string,
-    lastName: string,
-    middleName: string,
-    gender: Genders,
-    mobileNumbers: string,
-    email: string,
-    roles: Roles,
-    dateOfBirth: Date,
-    primaryAddressIndex: number,
-    login: Login,
-  ) {
-    super();
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.middleName = middleName;
-    this.gender = gender;
-    this.email = email;
-    this.mobileNumbers = mobileNumbers;
-    this.roles = roles;
-    this.dateOfBirth = dateOfBirth;
-    this.primaryAddressIndex = primaryAddressIndex;
-    this.login = { ...login };
-  }
-}
+const schema = new Schema({
+  salary: { type: Number, required: true },
+  isCurrent: { type: Boolean, required: true },
+  loginID: { type: String, required: true },
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  middleName: { type: String, required: false },
+  gender: { type: Genders, required: true },
+  mobileNumbers: { type: String, required: true },
+  email: { type: String, required: true },
+  roles: { type: Roles, required: true },
+  dateOfBirth: { type: Date, required: true },
+  primaryAddressIndex: { type: Number, required: true },
+});
+
+export type Employee = InferSchemaType<typeof schema>;
+export const EmployeeImp = { name: 'Employee', schema };

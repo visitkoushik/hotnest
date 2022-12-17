@@ -1,12 +1,9 @@
-import { BaseEntity } from './BaseEntity';
+import { Schema, InferSchemaType } from 'mongoose';
 
-export class Category extends BaseEntity {
-  categoryName: string;
-  available: boolean;
+const schema = new Schema({
+  categoryName: { type: String, required: true },
+  available: { type: Boolean, require: true },
+});
 
-  constructor(categoryName: string, available: boolean) {
-    super();
-    this.categoryName = categoryName;
-    this.available = available;
-  }
-}
+export type Category = InferSchemaType<typeof schema>;
+export const CategoryImp = { name: 'Category', schema };

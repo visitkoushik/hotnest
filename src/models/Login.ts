@@ -1,16 +1,12 @@
-import { BaseEntity } from './BaseEntity';
+import { Schema, InferSchemaType } from 'mongoose';
 
-export class Login extends BaseEntity {
-  public active: boolean;
-  public authCode: string;
-  public userID: string;
-  public userName: string;
-  public passCode: string;
+const schema = new Schema({
+  authCode: { type: String, required: false },
+  userID: { type: String, required: false },
+  passCode: { type: String, required: true },
+  userName: { type: String, required: true },
+  active: { type: Boolean, require: true },
+});
 
-  constructor(userID: string, userName: string, passCode: string) {
-    super();
-    this.userID = userID;
-    this.userName = userName;
-    this.passCode = passCode;
-  }
-}
+export type Login = InferSchemaType<typeof schema>;
+export const LoginImpl = { name: 'Login', schema };
