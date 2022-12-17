@@ -1,13 +1,29 @@
-import { Schema, InferSchemaType, Types } from 'mongoose';
+import { Prop, Schema } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+import { BaseSchema } from './BaseSchema';
 
-const schema = new Schema({
-  itemName: { type: String, required: true },
-  description: { type: String, required: false },
-  category_ids: { type: [String], required: true },
-  priceAmount: { type: String, required: true },
-  sellingAmount: { type: String, required: true },
-  available: { type: Boolean, require: true },
-});
+export type ItemDocument = Item & Document;
+@Schema()
+export class Item {
+  @Prop({ required: true, maxlength: 30 })
+  itemName: string;
 
-export type Item = InferSchemaType<typeof schema>;
-export const ItemImpl = { name: 'Item', schema };
+  @Prop({ maxlength: 60 })
+  description: string;
+
+  @Prop({ required: true })
+  category_ids: Array<string>;
+
+  @Prop({ required: true })
+  priceAmount: number;
+
+  @Prop({ required: true })
+  sellingAmount: number;
+
+  @Prop({ require: true })
+  available: boolean;
+}
+
+export const schema = BaseSchema.createForClass(Item);
+
+export const ItemImpl = { name: Item.name, schema };

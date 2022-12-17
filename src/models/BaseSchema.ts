@@ -19,9 +19,11 @@ export class BaseSchema extends mongoose.Schema {
   ): mongoose.Schema<TClass> {
     const schema: mongoose.Schema<TClass> =
       SchemaFactory.createForClass(target);
+
     schema.set('toJSON', {
       virtuals: true,
       transform: (doc, converted) => {
+        console.log(converted);
         delete converted._id;
         delete converted.__v;
       },

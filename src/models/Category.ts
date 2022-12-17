@@ -1,15 +1,4 @@
-// import { Schema, InferSchemaType } from 'mongoose';
-// import { BaseSchema } from './BaseSchema';
-
-// const schema = new BaseSchema({
-//   categoryName: { type: String, required: true },
-//   available: { type: Boolean, require: true },
-// });
-
-// export type Category = InferSchemaType<typeof schema>;
-// export const CategoryImp = { name: 'Category', schema };
-
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { BaseSchema } from './BaseSchema';
 
@@ -25,4 +14,4 @@ export class Category {
 }
 
 export const schema = BaseSchema.createForClass(Category);
-export const CategoryImp = { name: Category.name, schema };
+export const CategoryImpl = { name: Category.name, schema };
