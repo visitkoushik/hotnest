@@ -1,6 +1,7 @@
 import { Prop, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { BaseSchema } from './BaseSchema';
+import { Genders } from './enum/Genders';
 
 export type CategoryDocument = Category & Document;
 

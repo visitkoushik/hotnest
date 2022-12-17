@@ -5,12 +5,11 @@ import { ItemService } from './item.service';
 
 @Controller('item')
 export class ItemController extends BaseController<Item, ItemService> {
-  constructor(private readonly moduleService: ItemService) {
-    super(moduleService);
-  }
-
   onAdd(item: Item) {
     item.available = true;
     return item;
+  }
+  constructor(private readonly moduleService: ItemService) {
+    super(moduleService);
   }
 }

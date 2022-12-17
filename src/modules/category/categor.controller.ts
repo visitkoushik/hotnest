@@ -8,12 +8,11 @@ export class CategoryController extends BaseController<
   Category,
   CategoryService
 > {
-  constructor(private readonly moduleService: CategoryService) {
-    super(moduleService);
-  }
-
   onAdd(record: Category) {
     record.available = true;
     return record;
+  }
+  constructor(private readonly moduleService: CategoryService) {
+    super(moduleService);
   }
 }

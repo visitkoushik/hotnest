@@ -21,6 +21,8 @@ const schema = new Schema({
   email: { type: String, required: true },
   roles: { type: String, enum: Roles, default: Roles.CLIENT, required: true },
   dateOfBirth: { type: Date, required: true },
+  dateOfJoin: { type: Date, required: true },
+  dateOfExit: { type: Date, required: true },
   primaryAddressIndex: { type: Number, required: true },
   userType: {
     type: String,

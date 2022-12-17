@@ -1,23 +1,32 @@
-import { Schema, InferSchemaType } from 'mongoose';
+import { Prop, Schema } from '@nestjs/mongoose';
+import { truncateSync } from 'fs';
+import { BaseSchema } from './BaseSchema';
 import { Genders } from './enum/Genders';
 import { Roles } from './enum/Roles';
 
-const schema = new Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: false },
-  middleName: { type: String, required: false },
-  mobileNumbers: { type: String, required: false },
-  email: { type: String, required: false },
-  primaryAddressIndex: { type: Number, required: false },
-  gender: {
-    type: String,
-    enum: Genders,
-    default: Genders.MALE,
-    required: true,
-  },
-  roles: { type: String, enum: Roles, default: Roles.CLIENT, required: true },
-  dateOfBirth: { type: Date, required: false },
-});
+export type CustomerDocument = Customer & Document;
 
-export type Customer = InferSchemaType<typeof schema>;
-export const CustomerImpl = { name: 'Customer', schema };
+@Schema()
+export class Customer {
+  @Prop({ required: true, maxlength: 15 })
+  firstName: string;
+  @Prop({ required: false, maxlength: 15 })
+  lastName: string;
+  @Prop({ required: false, maxlength: 15 })
+  middleName: string;
+  @Prop({ required: false, maxlength: 10 })
+  mobileNumbers: string;
+  @Prop({ required: false, maxlength: 25 })
+  email: string;
+  @Prop({ required: false })
+  primaryAddressIndex: number;
+  @Prop({ required: true })
+  gender: Genders;
+  @Prop({ required: true })
+  roles: Roles;
+  @Prop({ required: false })
+  dateOfBirth: Date;
+}
+
+export const schema = BaseSchema.createForClass(Customer);
+export const CustomerImpl = { name: Customer.name, schema };
