@@ -1,15 +1,19 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
+import { BaseController } from 'src/appServices/BaseControler';
 import { Category } from 'src/models/Category';
 import { CategoryService } from './categor.service';
 
 @Controller('category')
-export class CategoryController {
-  constructor(private readonly moduleService: CategoryService) {}
+export class CategoryController extends BaseController<
+  Category,
+  CategoryService
+> {
+  constructor(private readonly moduleService: CategoryService) {
+    super(moduleService);
+  }
 
-  @Post('add')
-  addCategory(@Body() category: Category): any {
-    category.available = true;
-    const generatedResult = this.moduleService.insert(category);
-    return generatedResult;
+  onAdd(record: Category) {
+    record.available = true;
+    return record;
   }
 }

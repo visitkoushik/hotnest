@@ -1,15 +1,16 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
+import { BaseController } from 'src/appServices/BaseControler';
 import { Item } from 'src/models/Item';
 import { ItemService } from './item.service';
 
 @Controller('item')
-export class ItemController {
-  constructor(private readonly moduleService: ItemService) {}
+export class ItemController extends BaseController<Item, ItemService> {
+  constructor(private readonly moduleService: ItemService) {
+    super(moduleService);
+  }
 
-  @Post('add')
-  addCategory(@Body() item: Item): any {
+  onAdd(item: Item) {
     item.available = true;
-    const generatedResult = this.moduleService.insert(item);
-    return generatedResult;
+    return item;
   }
 }
