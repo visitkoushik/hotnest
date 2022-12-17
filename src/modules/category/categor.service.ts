@@ -1,24 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { BaseService } from 'src/appServices/baseService';
 
 import { Category } from 'src/models/Category';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { BaseService } from 'src/appServices/BaseServices';
 
 @Injectable()
-export class CategoryService {
+export class CategoryService extends BaseService<Category> {
   constructor(
-    @InjectModel('Category')
+    @InjectModel(Category.name)
     private readonly categoryModel: Model<Category>,
-  ) {}
-  // findAll<Category>(authKey: string): Category[] {
-  //   const list: Category[] = [] as Category[];
-  //   return list;
-  // }
-
-  async insert(category: Category): Promise<string | Category> {
-    const newObj = new this.categoryModel(category);
-    const savedObject = await newObj.save();
-    return savedObject;
+  ) {
+    super(categoryModel);
   }
 }

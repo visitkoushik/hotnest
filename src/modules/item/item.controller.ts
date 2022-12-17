@@ -5,8 +5,8 @@ import { ItemService } from './item.service';
 export class ItemController {
   constructor(private readonly appService: ItemService) {}
 
-  @Get('list')
-  findAll(): string {
-    return this.appService.findAll();
-  }
+  // @Get('list')
+  // findAll(): string {
+  //   return this.appService.findAll();
+  // }
 }

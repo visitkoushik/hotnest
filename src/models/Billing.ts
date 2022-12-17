@@ -1,11 +1,7 @@
 import { Schema, InferSchemaType } from 'mongoose';
-import { CustomerController } from 'src/modules/castomer/castomer.controller';
-import { BillingItem } from './BillingItem';
-import { Customer, CustomerImpl } from './Customer';
-import { Genders } from './enum/Genders';
-import { Roles } from './enum/Roles';
+import { BaseSchema } from './BaseSchema';
 
-const schema = new Schema({
+const schema = new BaseSchema({
   billingItemIdList: { type: [String], required: true },
   billingDate: { type: Date, required: true },
   customerID: { type: String, required: true },

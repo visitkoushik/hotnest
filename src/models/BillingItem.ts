@@ -1,6 +1,7 @@
 import { Schema, InferSchemaType } from 'mongoose';
+import { BaseSchema } from './BaseSchema';
 
-const schema = new Schema({
+const schema = new BaseSchema({
   itemId: { type: String, required: true },
   priceAmount: { type: Number, required: true },
   sellingAmount: { type: Number, required: true },

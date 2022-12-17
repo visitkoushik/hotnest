@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { BillingController } from './categor.controller';
-import { BillingService } from './categor.service';
+import { BillingController } from './billing.controller';
+import { BillingService } from './billing.service';
 
 @Module({
   imports: [],

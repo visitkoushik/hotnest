@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { Billing } from 'src/models/Billing';
-import { BillingService } from './categor.service';
+import { BillingService } from './billing.service';
 
 @Controller('billing')
 export class BillingController {

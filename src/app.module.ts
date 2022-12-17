@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { BillingModule } from './modules/billings/categor.module';
+import { BillingModule } from './modules/billings/billing.module';
 import { CustomerModule } from './modules/castomer/castomer.module';
 import { CategoryModule } from './modules/category/categor.module';
 import { EmployeeModule } from './modules/employee/employee.module';
