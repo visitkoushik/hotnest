@@ -6,18 +6,10 @@ import { CategoryService } from './categor.service';
 export class CategoryController {
   constructor(private readonly moduleService: CategoryService) {}
 
-  // @Get('list')
-  // findAll(): Category[] {
-  //   return this.appService.findAll('hgg');
-  // }
-
   @Post('add')
   addCategory(@Body() category: Category): any {
     category.available = true;
-    const generatedResult = this.moduleService.insert(
-      category.categoryName,
-      category.available,
-    );
+    const generatedResult = this.moduleService.insert(category);
     return generatedResult;
   }
 }

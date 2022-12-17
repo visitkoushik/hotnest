@@ -6,8 +6,8 @@ import { EmployeeService } from './employee.service';
 export class EmployeeController {
   constructor(private readonly appService: EmployeeService) {}
 
-  @Get('list')
-  findAll(): Employee[] {
-    return this.appService.findAll('dsa');
-  }
+  // @Get('list')
+  // findAll(): Employee[] {
+  //   return this.appService.findAll('dsa');
+  // }
 }

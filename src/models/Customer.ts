@@ -9,8 +9,13 @@ const schema = new Schema({
   mobileNumbers: { type: String, required: false },
   email: { type: String, required: false },
   primaryAddressIndex: { type: Number, required: false },
-  gender: { type: Genders, required: false },
-  roles: { type: Roles, required: false },
+  gender: {
+    type: String,
+    enum: Genders,
+    default: Genders.MALE,
+    required: true,
+  },
+  roles: { type: String, enum: Roles, default: Roles.CLIENT, required: true },
   dateOfBirth: { type: Date, required: false },
 });
 

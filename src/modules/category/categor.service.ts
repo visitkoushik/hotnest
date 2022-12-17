@@ -16,11 +16,8 @@ export class CategoryService {
   //   return list;
   // }
 
-  async insert(
-    categoryName: string,
-    available: boolean,
-  ): Promise<string | Category> {
-    const newObj = new this.categoryModel({ categoryName, available });
+  async insert(category: Category): Promise<string | Category> {
+    const newObj = new this.categoryModel(category);
     const savedObject = await newObj.save();
     return savedObject;
   }
