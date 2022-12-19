@@ -6,8 +6,16 @@ import { BaseService } from 'src/appServices/BaseServices';
 
 @Injectable()
 export class ItemService extends BaseService<Item> {
+  // beforeInsert(record: Item): Item {
+  //   const record: Item = null;
+  //   const recordItemPrice: ItemPrice = request.body as unknown as ItemPrice;
+
+  //   console.log(recordItemPrice);
+  //   return record;
+  // }
+
   constructor(
-    @InjectModel('Item')
+    @InjectModel(Item.name)
     private readonly itemModel: Model<Item>,
   ) {
     super(itemModel);

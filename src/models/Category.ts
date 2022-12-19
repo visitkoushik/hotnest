@@ -12,6 +12,9 @@ export class Category {
 
   @Prop({ require: true })
   available: boolean;
+
+  @Prop()
+  gender: Genders;
 }
 
 export const schema = BaseSchema.createForClass(Category);

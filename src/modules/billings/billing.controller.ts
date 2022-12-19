@@ -1,13 +1,11 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Res } from '@nestjs/common';
+import { BaseController } from 'src/appServices/BaseControler';
 import { Billing } from 'src/models/Billing';
 import { BillingService } from './billing.service';
 
 @Controller('billing')
-export class BillingController {
-  constructor(private readonly appService: BillingService) {}
-
-  @Get('list')
-  findAll(): Billing[] {
-    return this.appService.findAll('hgg');
+export class BillingController extends BaseController<Billing, BillingService> {
+  constructor(private readonly appService: BillingService) {
+    super(appService);
   }
 }

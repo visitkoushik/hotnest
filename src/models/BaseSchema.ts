@@ -23,7 +23,6 @@ export class BaseSchema extends mongoose.Schema {
     schema.set('toJSON', {
       virtuals: true,
       transform: (doc, converted) => {
-        console.log(converted);
         delete converted._id;
         delete converted.__v;
       },

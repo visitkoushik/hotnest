@@ -1,7 +1,3 @@
-import { Genders } from './enum/Genders';
-import { Roles } from './enum/Roles';
-import { UserType } from './enum/UserType';
-import { Login } from './Login';
 import { Person } from './Person';
 import { Prop, Schema } from '@nestjs/mongoose';
 
@@ -10,7 +6,7 @@ import { BaseSchema } from './BaseSchema';
 export type EmployeeDocument = Employee & Document;
 
 @Schema()
-class Employee extends Person {
+export class Employee extends Person {
   @Prop({ required: true })
   dateOfBirth: Date;
   @Prop({ required: false })
@@ -24,4 +20,4 @@ class Employee extends Person {
 }
 
 export const schema = BaseSchema.createForClass(Employee);
-export const CustomerImpl = { name: Employee.name, schema };
+export const EmployeeImpl = { name: Employee.name, schema };
