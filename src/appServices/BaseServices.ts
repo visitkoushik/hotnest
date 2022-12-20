@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import mongoose, { Model, PopulateOptions } from 'mongoose';
+import { Model, PopulateOptions } from 'mongoose';
 import { AppResponse } from 'src/models/AppResponse';
 
 export abstract class BaseService<TClass> {
@@ -75,12 +74,15 @@ export abstract class BaseService<TClass> {
     id: string,
   ): Promise<AppResponse<string | TClass>> {
     try {
-      const savedObj: TClass = await this.model.findByIdAndUpdate(id, record, {
-        new: true,
-      });
+      const modifiedObject: any = this.beforeInsert(record);
+      const savedObj: any = await this.model.findByIdAndUpdate(
+        id,
+        modifiedObject,
+        {
+          new: true,
+        },
+      );
 
-      // const savedObj: TClass = this.model.upa;
-      // const record: TClass = list.length ? list[0] : [];
       if (savedObj != null) {
         return new AppResponse(1, savedObj, null);
       } else {
@@ -88,6 +90,15 @@ export abstract class BaseService<TClass> {
       }
     } catch (e) {
       return new AppResponse(0, null, ' e.toString()');
+    }
+  }
+
+  async delete(id: string): Promise<any> {
+    try {
+      await this.model.findByIdAndRemove(id);
+      return new AppResponse(1, 'Element successfuly removed', null);
+    } catch {
+      return new AppResponse(0, null, 'Something went wrong');
     }
   }
 }
