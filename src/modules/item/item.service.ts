@@ -22,7 +22,7 @@ export class ItemService extends BaseService<Item> {
     super(itemModel, [
       {
         path: Category.name.toLowerCase(),
-        model: Category.name,
+        select: 'categoryName',
         options: { strictPopulate: false },
       },
     ]);

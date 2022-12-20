@@ -3,13 +3,13 @@ import { BaseSchema } from './BaseSchema';
 import * as mongoose from 'mongoose';
 import { Item } from './Item';
 
+export type BillingItemDocument = BillingItem & mongoose.Document;
 @Schema()
 export class BillingItem {
-  @Prop({
-    ref: Item.name,
-    required: [true, 'Item id required'],
-  })
-  item: mongoose.Schema.Types.ObjectId;
+  @Prop({ required: true })
+  itemID: string;
+  @Prop({ required: true })
+  itemName: string;
   @Prop()
   priceAmount: number;
   @Prop()

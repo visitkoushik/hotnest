@@ -4,6 +4,7 @@ import { BillingItem, BillingItemSchema } from './BillingItem';
 import { Customer } from './Customer';
 import * as mongoose from 'mongoose';
 import { Category } from './Category';
+import { Item } from './Item';
 
 export type BillingDocument = Billing & mongoose.Document;
 @Schema()
