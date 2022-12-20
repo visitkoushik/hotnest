@@ -1,5 +1,6 @@
 import { Prop, Schema } from '@nestjs/mongoose';
 import { BaseSchema } from './BaseSchema';
+import * as mongoose from 'mongoose';
 
 export type LoginDocument = Login & Document;
 
@@ -7,9 +8,6 @@ export type LoginDocument = Login & Document;
 export class Login {
   @Prop({ required: false })
   authCode: string;
-
-  @Prop({ required: false })
-  userID: string;
 
   @Prop({ required: true, minlength: 8, maxlength: 50 })
   passcode: string;

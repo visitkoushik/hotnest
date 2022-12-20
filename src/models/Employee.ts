@@ -2,6 +2,8 @@ import { Person } from './Person';
 import { Prop, Schema } from '@nestjs/mongoose';
 
 import { BaseSchema } from './BaseSchema';
+import { Login } from './Login';
+import mongoose from 'mongoose';
 
 export type EmployeeDocument = Employee & Document;
 
@@ -17,6 +19,9 @@ export class Employee extends Person {
   salary: number;
   @Prop({ required: true })
   isCurrent: boolean;
+
+  @Prop({ ref: Login.name, required: true })
+  loginInfo: mongoose.Schema.Types.ObjectId;
 }
 
 export const EmployeeSchema = BaseSchema.createForClass(Employee);
