@@ -17,5 +17,5 @@ export class Category {
   gender: Genders;
 }
 
-export const schema = BaseSchema.createForClass(Category);
-export const CategoryImpl = { name: Category.name, schema };
+export const CategorySchema = BaseSchema.createForClass(Category);
+export const CategoryImpl = { name: Category.name, schema: CategorySchema };

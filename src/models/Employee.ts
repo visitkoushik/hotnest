@@ -19,5 +19,5 @@ export class Employee extends Person {
   isCurrent: boolean;
 }
 
-export const schema = BaseSchema.createForClass(Employee);
-export const EmployeeImpl = { name: Employee.name, schema };
+export const EmployeeSchema = BaseSchema.createForClass(Employee);
+export const EmployeeImpl = { name: Employee.name, schema: EmployeeSchema };

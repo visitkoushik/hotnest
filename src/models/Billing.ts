@@ -1,13 +1,17 @@
 import { Prop, Schema } from '@nestjs/mongoose';
 import { BaseSchema } from './BaseSchema';
-import { BillingItem } from './BillingItem';
+import { BillingItem, BillingItemSchema } from './BillingItem';
 import { Customer } from './Customer';
 import * as mongoose from 'mongoose';
+import { Category } from './Category';
 
 export type BillingDocument = Billing & mongoose.Document;
 @Schema()
 export class Billing {
-  @Prop({ required: [true, 'Billing item list can not be empty'] })
+  @Prop({
+    type: [BillingItemSchema],
+    required: [true, 'Billing item list can not be empty'],
+  })
   billingItemList: BillingItem[];
 
   @Prop({ required: true, default: Date.now })

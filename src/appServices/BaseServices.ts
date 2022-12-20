@@ -1,20 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model, PopulateOptions } from 'mongoose';
 import { AppResponse } from 'src/models/AppResponse';
 
 export abstract class BaseService<TClass> {
   private model: Model<TClass>;
-  private populate?: {
-    path: string;
-    model: string;
-  };
-  constructor(
-    model: Model<TClass>,
-    populate?: {
-      path: string;
-      model: string;
-    },
-  ) {
+  private populate?: PopulateOptions[];
+  constructor(model: Model<TClass>, populate?: PopulateOptions[]) {
     this.model = model;
     this.populate = populate;
   }

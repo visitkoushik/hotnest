@@ -3,6 +3,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Item } from 'src/models/Item';
 import { BaseService } from 'src/appServices/BaseServices';
+import { Category } from 'src/models/Category';
 
 @Injectable()
 export class ItemService extends BaseService<Item> {
@@ -18,6 +19,12 @@ export class ItemService extends BaseService<Item> {
     @InjectModel(Item.name)
     private readonly itemModel: Model<Item>,
   ) {
-    super(itemModel);
+    super(itemModel, [
+      {
+        path: Category.name.toLowerCase(),
+        model: Category.name,
+        options: { strictPopulate: false },
+      },
+    ]);
   }
 }

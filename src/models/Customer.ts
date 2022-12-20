@@ -8,5 +8,5 @@ export type CustomerDocument = Customer & Document;
 @Schema()
 export class Customer extends Person {}
 
-export const schema = BaseSchema.createForClass(Customer);
-export const CustomerImpl = { name: Customer.name, schema };
+export const CustomerSchema = BaseSchema.createForClass(Customer);
+export const CustomerImpl = { name: Customer.name, schema: CustomerSchema };

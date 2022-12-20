@@ -21,5 +21,5 @@ export class Login {
   active: boolean;
 }
 
-export const schema = BaseSchema.createForClass(Login);
-export const LoginImpl = { name: Login.name, schema };
+export const LoginSchema = BaseSchema.createForClass(Login);
+export const LoginImpl = { name: Login.name, schema: LoginSchema };

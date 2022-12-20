@@ -1,8 +1,10 @@
 import { Prop, Schema } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import * as mongoose from 'mongoose';
 import { BaseSchema } from './BaseSchema';
+import { Category } from './Category';
+import { ItemPrice } from './ItemPrice';
 
-export type ItemDocument = Item & Document;
+export type ItemDocument = Item & mongoose.Document;
 @Schema()
 export class Item {
   @Prop({ required: true, maxlength: 30 })
@@ -11,19 +13,18 @@ export class Item {
   @Prop({ maxlength: 60 })
   description: string;
 
-  @Prop({ required: true })
-  category_ids: Array<string>;
+  @Prop({
+    ref: Category.name,
+  })
+  category: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true })
-  priceAmount: number;
-
-  @Prop({ required: true })
-  sellingAmount: number;
+  itemPrice: ItemPrice;
 
   @Prop({ require: true })
   available: boolean;
 }
 
-export const schema = BaseSchema.createForClass(Item);
+export const ItemSchema = BaseSchema.createForClass(Item);
 
-export const ItemImpl = { name: Item.name, schema };
+export const ItemImpl = { name: Item.name, schema: ItemSchema };
