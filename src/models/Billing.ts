@@ -33,6 +33,12 @@ export class Billing {
 
   @Prop({ required: false })
   isDiscountInPercentage: boolean;
+
+  @Prop({ required: false, default: 0 })
+  Ptotal: number;
+
+  @Prop({ required: false, default: 0 })
+  Stotal: number;
 }
 
 export const schema = BaseSchema.createForClass(Billing);
