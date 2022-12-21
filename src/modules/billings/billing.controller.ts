@@ -21,7 +21,8 @@ export class BillingController extends BaseController<Billing, BillingService> {
   }
 
   async beforeProcessRequest(request: Request): Promise<Billing> {
-    const record: BillingReq = request.body;
+    let record: BillingReq = request.body;
+    record = this.calculateTotal(record);
     const customer = await this.createingCustomerFromRequest(record);
 
     const newrecord: BillingReq = { ...record };
@@ -60,19 +61,26 @@ export class BillingController extends BaseController<Billing, BillingService> {
     await this.customerService.delete(record.customer + '');
   }
 
-
-
   async update(@Res() response, @Req() request: Request, @Param('id') id) {
     response
-    .status(HttpStatus.NOT_ACCEPTABLE)
-    .json(new AppResponse<string>(0, null, 'Update not Acceptable'));
-    
+      .status(HttpStatus.NOT_ACCEPTABLE)
+      .json(new AppResponse<string>(0, null, 'Update not Acceptable'));
   }
 
   async delete(@Res() response, @Req() request: Request, @Param('id') id) {
     response
-    .status(HttpStatus.NOT_ACCEPTABLE)
-    .json(new AppResponse<string>(0, null, 'Delete not Acceptable'));
-    
+      .status(HttpStatus.NOT_ACCEPTABLE)
+      .json(new AppResponse<string>(0, null, 'Delete not Acceptable'));
+  }
+
+  private calculateTotal(record: BillingReq): BillingReq {
+    record.Ptotal = 0;
+    record.Stotal = 0;
+    record.billingItemList.map((b) => {
+      record.Ptotal += b.priceAmount;
+      record.Stotal += b.sellingAmount;
+    });
+
+    return JSON.parse(JSON.stringify(record));
   }
 }

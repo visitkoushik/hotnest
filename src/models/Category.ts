@@ -13,7 +13,6 @@ export class Category extends BaseEntity {
 
   @Prop({ require: true })
   available: boolean;
-
 }
 
 export const CategorySchema = BaseSchema.createForClass(Category);

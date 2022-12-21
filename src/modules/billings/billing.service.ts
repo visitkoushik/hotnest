@@ -18,26 +18,9 @@ export class BillingService extends BaseService<Billing> {
     super(billingModel, [
       {
         path: Customer.name.toLowerCase(),
-        select: 'firstName description gender',
+        select: 'firstName lastName middleName gender',
         options: { strictPopulate: false },
       },
     ]);
   }
-
-  public beforeInsert(record: Billing): Billing {
-    return this.calculateTotal(record);
-  }
-
-  private calculateTotal(record: Billing): Billing {
-    record.Ptotal = 0;
-    record.Stotal = 0;
-    record.billingItemList.map((b) => {
-      record.Ptotal += b.priceAmount;
-      record.Stotal += b.sellingAmount;
-    });
-
-    return JSON.parse(JSON.stringify(record));
-  }
- 
-
 }
