@@ -2,6 +2,7 @@ import { Get, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BaseService } from 'src/appServices/BaseServices';
+import { AppResponse } from 'src/models/AppResponse';
 import { Billing } from 'src/models/Billing';
 import { BillingItem, BillingItemSchema } from 'src/models/BillingItem';
 import { Category } from 'src/models/Category';
@@ -17,7 +18,7 @@ export class BillingService extends BaseService<Billing> {
     super(billingModel, [
       {
         path: Customer.name.toLowerCase(),
-        select: 'firstName lastName gender',
+        select: 'firstName description gender',
         options: { strictPopulate: false },
       },
     ]);
@@ -37,4 +38,6 @@ export class BillingService extends BaseService<Billing> {
 
     return JSON.parse(JSON.stringify(record));
   }
+ 
+
 }

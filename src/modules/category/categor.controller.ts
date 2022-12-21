@@ -14,7 +14,6 @@ export class CategoryController extends BaseController<
       record.available = true;
     }
     record.available = true;
-    record.gender = Genders.OTHERS;
     return record;
   }
   constructor(private readonly moduleService: CategoryService) {

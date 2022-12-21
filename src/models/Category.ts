@@ -14,8 +14,6 @@ export class Category extends BaseEntity {
   @Prop({ require: true })
   available: boolean;
 
-  @Prop()
-  gender: Genders;
 }
 
 export const CategorySchema = BaseSchema.createForClass(Category);

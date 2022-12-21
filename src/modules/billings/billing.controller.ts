@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Res } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, Req, Res } from '@nestjs/common';
 import { BaseController } from 'src/appServices/BaseControler';
 import { Billing } from 'src/models/Billing';
 import { BillingService } from './billing.service';
@@ -58,5 +58,21 @@ export class BillingController extends BaseController<Billing, BillingService> {
 
   async onError(record: Billing) {
     await this.customerService.delete(record.customer + '');
+  }
+
+
+
+  async update(@Res() response, @Req() request: Request, @Param('id') id) {
+    response
+    .status(HttpStatus.NOT_ACCEPTABLE)
+    .json(new AppResponse<string>(0, null, 'Update not Acceptable'));
+    
+  }
+
+  async delete(@Res() response, @Req() request: Request, @Param('id') id) {
+    response
+    .status(HttpStatus.NOT_ACCEPTABLE)
+    .json(new AppResponse<string>(0, null, 'Delete not Acceptable'));
+    
   }
 }

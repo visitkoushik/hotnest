@@ -6,7 +6,10 @@ import { ItemService } from './item.service';
 @Controller('item')
 export class ItemController extends BaseController<Item, ItemService> {
   async onAdd(item: Item) {
-    item.available = true;
+   
+    if (item.available == null || item.available == undefined) {
+      item.available = true;
+    }
     return item;
   }
   constructor(private readonly moduleService: ItemService) {

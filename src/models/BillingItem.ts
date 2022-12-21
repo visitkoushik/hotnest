@@ -12,6 +12,8 @@ export class BillingItem extends BaseEntity {
   itemID: string;
   @Prop({ required: true })
   itemName: string;
+  @Prop({ required: false })
+  description: string;
   @Prop()
   priceAmount: number;
   @Prop()
@@ -31,5 +33,5 @@ export class BillingItem extends BaseEntity {
 export const BillingItemSchema = BaseSchema.createForClass(BillingItem);
 export const BillingItemImpl = {
   name: BillingItem.name,
-  BillingItemSchema,
+  schema: BillingItemSchema,
 };
