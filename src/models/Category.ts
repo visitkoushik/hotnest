@@ -1,12 +1,13 @@
 import { Prop, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { BaseEntity } from './BaseEntity';
 import { BaseSchema } from './BaseSchema';
 import { Genders } from './enum/Genders';
 
 export type CategoryDocument = Category & Document;
 
 @Schema()
-export class Category {
+export class Category extends BaseEntity {
   @Prop({ required: true, maxlength: 30 })
   categoryName: string;
 

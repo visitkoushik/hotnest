@@ -1,10 +1,11 @@
 import { Prop, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { BaseEntity } from './BaseEntity';
 import { BaseSchema } from './BaseSchema';
 
 export type ItemPriceDocument = ItemPrice & Document;
 @Schema()
-export class ItemPrice {
+export class ItemPrice extends BaseEntity {
   @Prop({ required: true })
   priceAmount: number;
 

@@ -2,8 +2,9 @@ import { Genders } from './enum/Genders';
 import { Roles } from './enum/Roles';
 import { Prop, Schema } from '@nestjs/mongoose';
 import { UserType } from './enum/UserType';
+import { BaseEntity } from './BaseEntity';
 
-export class Person {
+export class Person extends BaseEntity {
   @Prop({ required: true, maxlength: 15 })
   firstName: string;
   @Prop({ required: false, maxlength: 15 })

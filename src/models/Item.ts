@@ -1,12 +1,13 @@
 import { Prop, Schema } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
+import { BaseEntity } from './BaseEntity';
 import { BaseSchema } from './BaseSchema';
 import { Category } from './Category';
 import { ItemPrice } from './ItemPrice';
 
 export type ItemDocument = Item & mongoose.Document;
 @Schema()
-export class Item {
+export class Item extends BaseEntity {
   @Prop({ required: true, maxlength: 30 })
   itemName: string;
 

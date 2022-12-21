@@ -10,7 +10,7 @@ export class CustomerController extends BaseController<
   Customer,
   CustomerService
 > {
-  onAdd(record: Customer) {
+  async onAdd(record: Customer) {
     record.roles = Roles.CLIENT;
     record.userType = UserType.CLIENT;
     return record;

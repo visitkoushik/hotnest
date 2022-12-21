@@ -9,15 +9,13 @@ export abstract class BaseService<TClass> {
     this.populate = populate;
   }
   public beforeInsert(record: TClass): TClass {
-    console.log(' beforeInsert baseVersion Called');
     return record;
   }
 
   public afterInsert(record: TClass): TClass {
-    console.log('afterInsert baseVersion Called');
     return record;
   }
-  async insert(record: TClass): Promise<AppResponse<string | TClass>> {
+  async insert(record: TClass): Promise<AppResponse<TClass>> {
     const modifiedObject: any = this.beforeInsert(record);
     const newObj = new this.model(modifiedObject);
     try {
@@ -32,7 +30,7 @@ export abstract class BaseService<TClass> {
     }
   }
 
-  async findAll(): Promise<AppResponse<string | TClass[]>> {
+  async findAll(): Promise<AppResponse<TClass[]>> {
     try {
       if (this.populate) {
         const list: TClass[] = await this.model
@@ -48,7 +46,7 @@ export abstract class BaseService<TClass> {
     }
   }
 
-  async findById(id: string): Promise<AppResponse<string | TClass>> {
+  async findById(id: string): Promise<AppResponse<TClass>> {
     try {
       if (this.populate) {
         const record: any = await this.model

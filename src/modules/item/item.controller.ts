@@ -5,7 +5,7 @@ import { ItemService } from './item.service';
 
 @Controller('item')
 export class ItemController extends BaseController<Item, ItemService> {
-  onAdd(item: Item) {
+  async onAdd(item: Item) {
     item.available = true;
     return item;
   }

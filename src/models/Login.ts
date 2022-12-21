@@ -1,11 +1,12 @@
 import { Prop, Schema } from '@nestjs/mongoose';
 import { BaseSchema } from './BaseSchema';
 import * as mongoose from 'mongoose';
+import { BaseEntity } from './BaseEntity';
 
 export type LoginDocument = Login & Document;
 
 @Schema()
-export class Login {
+export class Login extends BaseEntity {
   @Prop({ required: false })
   authCode: string;
 

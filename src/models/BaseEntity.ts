@@ -1,7 +1,5 @@
-export class BaseEntity {
-  public id: string;
+import * as mongoose from 'mongoose';
 
-  constructor() {
-    this.id = '';
-  }
+export class BaseEntity {
+  id: mongoose.Schema.Types.ObjectId;
 }

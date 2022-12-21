@@ -9,7 +9,7 @@ export class CategoryController extends BaseController<
   Category,
   CategoryService
 > {
-  onAdd(record: Category) {
+  async onAdd(record: Category) {
     if (record.available == undefined || record.available == null) {
       record.available = true;
     }

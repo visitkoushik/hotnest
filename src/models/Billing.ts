@@ -5,10 +5,11 @@ import { Customer } from './Customer';
 import * as mongoose from 'mongoose';
 import { Category } from './Category';
 import { Item } from './Item';
+import { BaseEntity } from './BaseEntity';
 
 export type BillingDocument = Billing & mongoose.Document;
 @Schema()
-export class Billing {
+export class Billing extends BaseEntity {
   @Prop({
     type: [BillingItemSchema],
     required: [true, 'Billing item list can not be empty'],

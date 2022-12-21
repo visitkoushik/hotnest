@@ -17,34 +17,38 @@ export abstract class BaseController<
   TService extends BaseService<TClass>,
 > {
   private readonly service: TService;
-  private readonly record: TClass;
+  private record: TClass;
   constructor(service: TService) {
     this.service = service;
   }
 
-  onAdd(record: TClass): TClass {
+  async onAdd(record: TClass): Promise<TClass> {
     return record;
   }
 
-  beforeProcessRequest(request: Request): TClass {
+  async beforeProcessRequest(request: Request): Promise<TClass> {
     const record: TClass = request.body;
     return record;
   }
+  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+  async onError(record: TClass) {}
 
   @Post('add')
   async addCategory(@Res() response: Response, @Req() request: Request) {
     try {
-      const record: TClass = this.beforeProcessRequest(request);
-      const modifiedRecord: TClass = this.onAdd(record);
+      this.record = await this.beforeProcessRequest(request);
+      const modifiedRecord: TClass = await this.onAdd(this.record);
       const generatedResult: AppResponse<TClass | string> =
         await this.service.insert(modifiedRecord);
 
       if (generatedResult.status == 1) {
         response.status(HttpStatus.CREATED).json(generatedResult);
       } else {
+        this.onError(this.record);
         response.status(HttpStatus.UNPROCESSABLE_ENTITY).json(generatedResult);
       }
     } catch (e) {
+      this.onError(this.record);
       response
         .status(HttpStatus.UNPROCESSABLE_ENTITY)
         .json(new AppResponse<string>(0, null, 'Error occured'));
@@ -75,11 +79,13 @@ export abstract class BaseController<
 
   @Put('/:id')
   async update(@Res() response, @Req() request: Request, @Param('id') id) {
+    this.record = await this.beforeProcessRequest(request);
     const generatedResult: AppResponse<TClass | string> =
-      await this.service.update(request.body, id);
+      await this.service.update(this.record, id);
     if (generatedResult.status == 1) {
       response.status(HttpStatus.OK).json(generatedResult);
     } else {
+      this.onError(this.record);
       response.status(HttpStatus.NOT_FOUND).json(generatedResult);
     }
   }

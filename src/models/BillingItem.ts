@@ -2,10 +2,12 @@ import { Schema, Prop } from '@nestjs/mongoose';
 import { BaseSchema } from './BaseSchema';
 import * as mongoose from 'mongoose';
 import { Item } from './Item';
+import { BaseEntity } from './BaseEntity';
+import { Exclude } from 'class-transformer';
 
 export type BillingItemDocument = BillingItem & mongoose.Document;
 @Schema()
-export class BillingItem {
+export class BillingItem extends BaseEntity {
   @Prop({ required: true })
   itemID: string;
   @Prop({ required: true })
@@ -20,6 +22,10 @@ export class BillingItem {
   discount: number;
   @Prop()
   isDiscountInPercentage: boolean;
+
+  @Exclude()
+  @Prop({ default: Date.now })
+  date: Date;
 }
 
 export const BillingItemSchema = BaseSchema.createForClass(BillingItem);

@@ -8,7 +8,7 @@ export class EmployeeController extends BaseController<
   Employee,
   EmployeeService
 > {
-  onAdd(record: Employee) {
+  async onAdd(record: Employee) {
     if (record.isCurrent == null || record.isCurrent == undefined) {
       record.isCurrent = true;
     }
