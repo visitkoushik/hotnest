@@ -19,7 +19,6 @@ export class MetaData {
     this.menuItems.push(new Menu('logout', 'Logout'));
     this.menuItems.push(new Menu('login', 'Login'));
 
-    // new Menu('appsettings', 'App Settingd'),
     return this.menuItems;
   };
 
