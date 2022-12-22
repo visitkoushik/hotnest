@@ -1,16 +1,18 @@
 import { Controller, Get, HttpStatus, Param, Req, Res } from '@nestjs/common';
-import { BaseController } from 'src/appServices/BaseControler';
+import { BaseController } from 'src/controlers/BaseControler';
 import { Billing } from 'src/models/Billing';
-import { BillingService } from './billing.service';
+import { BillingService } from '../services/billing.service';
 
-import { Request } from 'express';
-import { CustomerService } from '../castomer/castomer.service';
+import { Request, Response } from 'express';
+import { CustomerService } from '../services/customer.service';
 import { Customer } from 'src/models/Customer';
 import { AppResponse } from 'src/models/AppResponse';
 import { BillingReq } from 'src/models/BillingReq';
 import { generate } from 'rxjs';
 import { UserType } from 'src/models/enum/UserType';
 import { Roles } from 'src/models/enum/Roles';
+import { ParamsDictionary } from 'express-serve-static-core';
+import { ParsedQs } from 'qs';
 @Controller('billing')
 export class BillingController extends BaseController<Billing, BillingService> {
   constructor(
@@ -82,5 +84,34 @@ export class BillingController extends BaseController<Billing, BillingService> {
     });
 
     return JSON.parse(JSON.stringify(record));
+  }
+
+  async pagingRequest(
+    request: Request,
+    params: AppResponse<Billing[] | string>,
+  ): Promise<AppResponse<Billing[] | string>> {
+    return super.pagingRequest(request, params);
+  }
+
+  async findAllAsQuery(response: Response, request: Request) {
+    const dt = request.query.date;
+
+    let startDt = request.query?.startDt;
+    let endDt = request.query?.endDt;
+    let filter_stage = {};
+
+    if ((startDt && endDt) || dt) {
+      if (dt) {
+        startDt = dt.toString().split('T')[0] + 'T00:00';
+        endDt = dt.toString().split('T')[0] + 'T23:59';
+      }
+      filter_stage = {
+        billingDate: {
+          $gte: startDt, //'2022-12-22T00:00',
+          $lte: endDt, //'2022-12-22T23:59',
+        },
+      };
+    }
+    super.findAllAsQuery(response, request, filter_stage);
   }
 }

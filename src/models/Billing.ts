@@ -27,6 +27,7 @@ export class Billing extends BaseEntity {
 
   @Prop({
     required: [true, 'Billnumber required'],
+    unique: [true, 'Duplicate bill number. try again'],
   })
   billNumber: string;
 
@@ -44,5 +45,5 @@ export class Billing extends BaseEntity {
 }
 
 export const schema = BaseSchema.createForClass(Billing);
-schema.index({ billingDate: 1, billNumber: 1 }, { unique: true });
+
 export const billingImpl = { name: Billing.name, schema };

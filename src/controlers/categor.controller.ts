@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
-import { BaseController } from 'src/appServices/BaseControler';
+import { BaseController } from 'src/controlers/BaseControler';
 import { Category } from 'src/models/Category';
 import { Genders } from 'src/models/enum/Genders';
-import { CategoryService } from './categor.service';
+import { CategoryService } from '../services/categor.service';
 
 @Controller('category')
 export class CategoryController extends BaseController<

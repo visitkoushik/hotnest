@@ -1,7 +1,7 @@
 import { Get, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { BaseService } from 'src/appServices/BaseServices';
+import { BaseService } from 'src/services/BaseServices';
 import { AppResponse } from 'src/models/AppResponse';
 import { Billing } from 'src/models/Billing';
 import { BillingItem, BillingItemSchema } from 'src/models/BillingItem';
@@ -23,4 +23,10 @@ export class BillingService extends BaseService<Billing> {
       },
     ]);
   }
+
+  // public beforeInsert(record: Billing): Billing {
+
+  //   this.billingModel.findOne({billNumber: {$gte:5} })
+
+  // }
 }

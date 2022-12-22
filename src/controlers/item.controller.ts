@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { BaseController } from 'src/appServices/BaseControler';
+import { BaseController } from 'src/controlers/BaseControler';
 import { Item } from 'src/models/Item';
-import { ItemService } from './item.service';
+import { ItemService } from '../services/item.service';
 
 @Controller('item')
 export class ItemController extends BaseController<Item, ItemService> {

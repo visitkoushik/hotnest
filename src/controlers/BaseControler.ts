@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AppResponse } from 'src/models/AppResponse';
-import { BaseService } from './BaseServices';
+import { BaseService } from '../services/BaseServices';
 
 export abstract class BaseController<
   TClass,
@@ -55,10 +55,52 @@ export abstract class BaseController<
     }
   }
 
+  async pagingRequest(
+    request: Request,
+    params: AppResponse<TClass[] | string>,
+  ): Promise<AppResponse<TClass[] | string>> {
+    if (params.status === 1 && !(typeof params.responseObject == 'string')) {
+      const requestQuery: any = request.query;
+      const billing: TClass[] = params.responseObject;
+      const pagination: boolean = requestQuery.paged || false;
+      const perPageRec: number = +requestQuery.count || 10;
+      const page: number = +requestQuery.page || 1;
+
+      if (pagination) {
+        const startIndex: number = perPageRec * (page - 1);
+
+        const billRes = billing.slice(startIndex, startIndex + perPageRec);
+
+        return {
+          ...params,
+          responseObject: billRes,
+          totalPage: Math.ceil(billing.length / perPageRec),
+          currentPage: page,
+        };
+      }
+    }
+    return params;
+  }
   @Get('lists')
-  async findAll(@Res() response) {
+  async findAll(
+    @Res() response: Response,
+    @Req() request: Request,
+    query?: any,
+  ) {
+    await this.findAllAsQuery(response, request);
+  }
+
+  async findAllAsQuery(
+    @Res() response: Response,
+    @Req() request: Request,
+    query?: any,
+  ) {
     const generatedResult: AppResponse<TClass[] | string> =
-      await this.service.findAll();
+      await this.pagingRequest(
+        request,
+        await this.service.findAll({ ...query }),
+      );
+
     if (generatedResult.status == 1) {
       response.status(HttpStatus.OK).json(generatedResult);
     } else {

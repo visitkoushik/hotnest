@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { BaseService } from 'src/appServices/BaseServices';
+import { BaseService } from 'src/services/BaseServices';
 import { BillingItem } from 'src/models/BillingItem';
 import { Model } from 'mongoose';
 import { Item } from 'src/models/Item';

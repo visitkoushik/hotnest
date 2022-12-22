@@ -30,11 +30,11 @@ export abstract class BaseService<TClass> {
     }
   }
 
-  async findAll(): Promise<AppResponse<TClass[]>> {
+  async findAll(query): Promise<AppResponse<TClass[]>> {
     try {
       if (this.populate) {
         const list: TClass[] = await this.model
-          .find({})
+          .find({ ...query })
           .populate(this.populate);
         return new AppResponse(1, list, null);
       } else {

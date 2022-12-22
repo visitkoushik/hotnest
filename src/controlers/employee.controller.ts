@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
-import { BaseController } from 'src/appServices/BaseControler';
+import { BaseController } from 'src/controlers/BaseControler';
 import { Employee } from 'src/models/Employee';
-import { EmployeeService } from './employee.service';
+import { EmployeeService } from '../services/employee.service';
 
 @Controller('employee')
 export class EmployeeController extends BaseController<

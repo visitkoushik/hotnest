@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Employee } from 'src/models/Employee';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { BaseService } from 'src/appServices/BaseServices';
+import { BaseService } from 'src/services/BaseServices';
 import { Login } from 'src/models/Login';
 
 @Injectable()

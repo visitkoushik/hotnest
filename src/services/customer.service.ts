@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseService } from 'src/appServices/BaseServices';
+import { BaseService } from 'src/services/BaseServices';
 import { Customer } from 'src/models/Customer';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
