@@ -42,6 +42,12 @@ export class Billing extends BaseEntity {
 
   @Prop({ required: false, default: 0 })
   Stotal: number;
+
+  @Prop({ required: true, default: 0 })
+  paid: number;
+
+  @Prop({ required: true, default: 0 })
+  tax: number;
 }
 
 export const schema = BaseSchema.createForClass(Billing);

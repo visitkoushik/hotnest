@@ -18,4 +18,6 @@ export class BillingReq extends Person {
   Stotal: number;
 
   castomerInfo: Customer;
+
+  itemCount: number;
 }

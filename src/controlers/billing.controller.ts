@@ -79,8 +79,8 @@ export class BillingController extends BaseController<Billing, BillingService> {
     record.Ptotal = 0;
     record.Stotal = 0;
     record.billingItemList.map((b) => {
-      record.Ptotal += b.priceAmount;
-      record.Stotal += b.sellingAmount;
+      record.Ptotal += b.priceAmount * record.itemCount;
+      record.Stotal += b.sellingAmount * record.itemCount;
     });
 
     return JSON.parse(JSON.stringify(record));

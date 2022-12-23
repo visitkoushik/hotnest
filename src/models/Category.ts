@@ -13,6 +13,11 @@ export class Category extends BaseEntity {
 
   @Prop({ require: true })
   available: boolean;
+
+  @Prop()
+  categoryDiscount: number;
+  @Prop()
+  discountInPercent: boolean;
 }
 
 export const CategorySchema = BaseSchema.createForClass(Category);

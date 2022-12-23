@@ -24,6 +24,11 @@ export class Item extends BaseEntity {
 
   @Prop({ require: true })
   available: boolean;
+
+  @Prop()
+  discount: number;
+  @Prop()
+  isDiscountInPercentage: boolean;
 }
 
 export const ItemSchema = BaseSchema.createForClass(Item);
