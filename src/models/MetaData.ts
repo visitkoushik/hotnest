@@ -9,6 +9,8 @@ export class MetaData {
   private menuItems = [];
   constructor(public ownerNeedtocreate) {}
   private getMenuItem = () => {
+    this.menuItems.push(new Menu('appsettings', 'App Settings'));
+    this.menuItems.push(new Menu('emp', 'Employee'));
     if (!this.ownerNeedtocreate) {
       this.menuItems.push(new Menu('bill', 'Bills'));
       this.menuItems.push(new Menu('item', 'Items'));
@@ -18,8 +20,6 @@ export class MetaData {
       this.menuItems.push(new Menu('login', 'Login'));
       this.menuItems.push(new Menu('logout', 'Logout'));
     }
-    this.menuItems.push(new Menu('appsettings', 'App Settings'));
-    this.menuItems.push(new Menu('employee', 'Employee'));
 
     return this.menuItems;
   };
@@ -32,7 +32,7 @@ export class MetaData {
   });
 
   private roles = Object.keys(Roles).map((name) => {
-    if (!this.ownerNeedtocreate) {
+    if (this.ownerNeedtocreate) {
       console.log(name != Roles.SUPERADMIN.toString());
       if (name != Roles.SUPERADMIN.toString()) {
         return;
@@ -45,7 +45,7 @@ export class MetaData {
   });
 
   private userType = Object.keys(UserType).map((name) => {
-    if (!this.ownerNeedtocreate) {
+    if (this.ownerNeedtocreate) {
       if (name != UserType.OWNER.toString()) {
         return;
       }
