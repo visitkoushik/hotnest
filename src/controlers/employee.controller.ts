@@ -10,7 +10,11 @@ export class EmployeeController extends BaseController<
 > {
   async onAdd(record: Employee) {
     if (record.isCurrent == null || record.isCurrent == undefined) {
-      record.isCurrent = true;
+      if (record.dateOfExist.toString().trim()) {
+        record.isCurrent = false;
+      } else {
+        record.isCurrent = true;
+      }
     }
 
     return record;
