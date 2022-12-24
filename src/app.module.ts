@@ -10,6 +10,7 @@ import { LoginRegisterModule } from './modules/login-register.module';
 
 import { MongooseModule } from '@nestjs/mongoose';
 import { MetadataController } from './controlers/metadata.controller';
+import { MetaDataModule } from './modules/metadata.module';
 // mongodb+srv://hotnest:Passw0rd2022@cluster0.9fdjzyb.mongodb.net/?retryWrites=true&w=majority
 @Module({
   imports: [
@@ -19,11 +20,12 @@ import { MetadataController } from './controlers/metadata.controller';
     CustomerModule,
     EmployeeModule,
     BillingModule,
+    MetaDataModule,
     MongooseModule.forRoot(
       'mongodb+srv://hotnest:D0Ou3CmA0ouah0r2@cluster-hotnet.qtxxdxy.mongodb.net/test?retryWrites=true&w=majority',
     ),
   ],
-  controllers: [AppController, MetadataController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}

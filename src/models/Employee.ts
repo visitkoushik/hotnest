@@ -20,7 +20,7 @@ export class Employee extends Person {
   @Prop({ required: true })
   isCurrent: boolean;
 
-  @Prop({ ref: Login.name, required: true })
+  @Prop({ ref: Login.name, required: false })
   loginInfo: mongoose.Schema.Types.ObjectId;
 }
 

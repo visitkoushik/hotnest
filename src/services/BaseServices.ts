@@ -30,18 +30,26 @@ export abstract class BaseService<TClass> {
     }
   }
 
-  async findAll(query): Promise<AppResponse<TClass[]>> {
+  async findAll(query, isPopulate?: boolean): Promise<AppResponse<TClass[]>> {
+    console.log(query);
     try {
-      if (this.populate) {
+      if (
+        this.populate &&
+        (isPopulate == null || isPopulate == undefined || isPopulate == true)
+      ) {
+        console.log('if');
         const list: TClass[] = await this.model
           .find({ ...query })
           .populate(this.populate);
+
         return new AppResponse(1, list, null);
       } else {
-        const list: TClass[] = await this.model.find().exec();
+        const list: TClass[] = await this.model.find({ ...query }).exec();
+        console.log('else', list);
         return new AppResponse(1, list, null);
       }
     } catch (e) {
+      console.log('catchs', e);
       return new AppResponse(0, null, e.toString());
     }
   }

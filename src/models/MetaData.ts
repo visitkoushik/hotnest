@@ -7,17 +7,19 @@ class Menu {
 }
 export class MetaData {
   private menuItems = [];
-
+  constructor(public ownerNeedtocreate) {}
   private getMenuItem = () => {
-    this.menuItems.push(new Menu('bill', 'Bills'));
-    this.menuItems.push(new Menu('item', 'Items'));
+    if (!this.ownerNeedtocreate) {
+      this.menuItems.push(new Menu('bill', 'Bills'));
+      this.menuItems.push(new Menu('item', 'Items'));
+      this.menuItems.push(new Menu('reports', 'Reports'));
+      this.menuItems.push(new Menu('customer', 'Customer'));
+      this.menuItems.push(new Menu('config', 'Configure'));
+      this.menuItems.push(new Menu('login', 'Login'));
+      this.menuItems.push(new Menu('logout', 'Logout'));
+    }
     this.menuItems.push(new Menu('appsettings', 'App Settings'));
-    this.menuItems.push(new Menu('config', 'Configure'));
-    this.menuItems.push(new Menu('reports', 'Reports'));
     this.menuItems.push(new Menu('employee', 'Employee'));
-    this.menuItems.push(new Menu('customer', 'Customer'));
-    this.menuItems.push(new Menu('logout', 'Logout'));
-    this.menuItems.push(new Menu('login', 'Login'));
 
     return this.menuItems;
   };
@@ -30,6 +32,12 @@ export class MetaData {
   });
 
   private roles = Object.keys(Roles).map((name) => {
+    if (!this.ownerNeedtocreate) {
+      console.log(name != Roles.SUPERADMIN.toString());
+      if (name != Roles.SUPERADMIN.toString()) {
+        return;
+      }
+    }
     return {
       name,
       value: Roles[name as keyof typeof Roles],
@@ -37,6 +45,11 @@ export class MetaData {
   });
 
   private userType = Object.keys(UserType).map((name) => {
+    if (!this.ownerNeedtocreate) {
+      if (name != UserType.OWNER.toString()) {
+        return;
+      }
+    }
     return {
       name,
       value: UserType[name as keyof typeof UserType],
@@ -45,10 +58,11 @@ export class MetaData {
 
   getMenu(): any {
     return {
-      menuItems: this.getMenuItem(),
-      genders: this.genders,
-      roles: this.roles,
-      usertype: this.userType,
+      menuItems: this.getMenuItem().filter((f) => f != null),
+      genders: this.genders.filter((f) => f != null),
+      roles: this.roles.filter((f) => f != null),
+      userType: this.userType.filter((f) => f != null),
+      ownerNeedtocreate: this.ownerNeedtocreate,
     };
   }
 }
