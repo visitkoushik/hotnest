@@ -32,7 +32,6 @@ export class EmployeeController extends BaseController<
 
   async beforeProcessRequest(request: Request): Promise<Employee> {
     const record: EmployeeReq = request.body;
-    ß;
     const login: Login = await this.RegisterUser(record);
     try {
       const cloneRecord: EmployeeReq = { ...record };
