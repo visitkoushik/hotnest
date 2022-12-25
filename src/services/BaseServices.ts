@@ -26,7 +26,7 @@ export abstract class BaseService<TClass> {
       }
       return new AppResponse(0, null, 'Error occured during Save');
     } catch (e) {
-      return new AppResponse(0, null, e.toString());
+      return new AppResponse(0, null, e.message);
     }
   }
 

@@ -13,7 +13,7 @@ export class Login extends BaseEntity {
   @Prop({ required: true, minlength: 8, maxlength: 50 })
   passcode: string;
 
-  @Prop({ required: true, unique: true, minlength: 8, maxlength: 50 })
+  @Prop({ required: true, unique: true, maxlength: 50 })
   userName: string;
 
   @Prop({ required: true })

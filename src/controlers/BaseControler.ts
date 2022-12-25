@@ -34,7 +34,7 @@ export abstract class BaseController<
   async onError(record: TClass) {}
 
   @Post('add')
-  async addCategory(@Res() response: Response, @Req() request: Request) {
+  async add(@Res() response: Response, @Req() request: Request) {
     try {
       this.record = await this.beforeProcessRequest(request);
       const modifiedRecord: TClass = await this.onAdd(this.record);
@@ -51,7 +51,7 @@ export abstract class BaseController<
       this.onError(this.record);
       response
         .status(HttpStatus.UNPROCESSABLE_ENTITY)
-        .json(new AppResponse<string>(0, null, 'Error occured'));
+        .json(new AppResponse<string>(0, null, e.message));
     }
   }
 

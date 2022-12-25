@@ -4,10 +4,11 @@ import { EmployeeController } from '../controlers/employee.controller';
 import { EmployeeService } from '../services/employee.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { LoginImpl } from 'src/models/Login';
+import { LoginRegisterService } from 'src/services/login-register.service';
 
 @Module({
   imports: [MongooseModule.forFeature([EmployeeImpl, LoginImpl])],
   controllers: [EmployeeController],
-  providers: [EmployeeService],
+  providers: [EmployeeService, LoginRegisterService],
 })
 export class EmployeeModule {}
