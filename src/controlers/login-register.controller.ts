@@ -8,6 +8,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { AppResponse } from 'src/models/AppResponse';
 import { Login } from 'src/models/Login';
 import { LoginRegisterService } from '../services/login-register.service';
 
@@ -18,32 +19,36 @@ export class LoginRegisterController {
   @Post('/login')
   async login(@Res() response: Response, @Req() request: Request) {
     try {
-      response
-        .status(HttpStatus.OK)
-        .json(await this.moduleService.login(request.body));
+      const userlogin = await this.moduleService.login(request.body);
+      response.status(HttpStatus.OK).json(new AppResponse(1, userlogin, null));
     } catch (e) {
-      response.status(HttpStatus.UNAUTHORIZED).json(e.message);
+      console.log('================Login Controler==================', e);
+      response
+        .status(HttpStatus.UNAUTHORIZED)
+        .json(new AppResponse(0, null, e.message));
     }
   }
   @Post('/logout')
   async logout(@Res() response: Response, @Req() request: Request) {
     try {
-      response
-        .status(HttpStatus.OK)
-        .json(await this.moduleService.logOut(request.body));
+      const userlogin = await this.moduleService.logOut(request.body);
+      response.status(HttpStatus.OK).json(new AppResponse(1, userlogin, null));
     } catch (e) {
-      response.status(HttpStatus.UNAUTHORIZED).json(e.message);
+      response
+        .status(HttpStatus.UNAUTHORIZED)
+        .json(new AppResponse(0, null, e.message));
     }
   }
 
   @Post('/changepassword')
   async changePass(@Res() response: Response, @Req() request: Request) {
     try {
-      response
-        .status(HttpStatus.OK)
-        .json(await this.moduleService.changePass(request.body));
+      const msg: string = await this.moduleService.changePass(request.body);
+      response.status(HttpStatus.OK).json(new AppResponse(1, msg, null));
     } catch (e) {
-      response.status(HttpStatus.UNAUTHORIZED).json(e.message);
+      response
+        .status(HttpStatus.UNAUTHORIZED)
+        .json(new AppResponse(0, null, e.message));
     }
   }
 }

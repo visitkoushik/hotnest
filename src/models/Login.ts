@@ -2,6 +2,7 @@ import { Prop, Schema } from '@nestjs/mongoose';
 import { BaseSchema } from './BaseSchema';
 import * as mongoose from 'mongoose';
 import { BaseEntity } from './BaseEntity';
+import { Exclude } from 'class-transformer';
 
 export type LoginDocument = Login & Document;
 

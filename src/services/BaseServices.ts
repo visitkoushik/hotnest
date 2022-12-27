@@ -37,7 +37,6 @@ export abstract class BaseService<TClass> {
         this.populate &&
         (isPopulate == null || isPopulate == undefined || isPopulate == true)
       ) {
-        console.log('if');
         const list: TClass[] = await this.model
           .find({ ...query })
           .populate(this.populate);
@@ -45,7 +44,7 @@ export abstract class BaseService<TClass> {
         return new AppResponse(1, list, null);
       } else {
         const list: TClass[] = await this.model.find({ ...query }).exec();
-        console.log('else', list);
+
         return new AppResponse(1, list, null);
       }
     } catch (e) {

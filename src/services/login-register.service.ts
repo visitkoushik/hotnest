@@ -10,11 +10,40 @@ export class LoginRegisterService {
     @InjectModel('Login')
     private readonly loginModel: Model<Login>,
   ) {}
+
+  async findByAuthCode(authCode: string): Promise<Login> {
+    const filter_stage = {
+      authCode: {
+        $eq: authCode,
+      },
+    };
+
+    try {
+      const logInfo: Login = await this.loginModel.findOne(filter_stage);
+      if (!logInfo) {
+        throw new Error('Invalid authcode ' + authCode);
+      }
+      return logInfo;
+    } catch (e) {
+      throw e;
+    }
+  }
   async insert(login: Login): Promise<Login> {
     if (login.active == undefined || login.active == null) {
       login.active = true;
     }
     const newObj: any = new this.loginModel(login);
+    const filter_stage = {
+      userName: {
+        $eq: newObj.userName,
+      },
+    };
+    const logInfo: Login = await this.loginModel.findOne(filter_stage);
+
+    if (logInfo) {
+      throw new Error(`Username ${logInfo.userName} is already taken`);
+    }
+
     const savedObject = await newObj.save().catch((e) => {
       throw new Error(e.message);
     });
@@ -48,7 +77,7 @@ export class LoginRegisterService {
   async login(authorization: {
     username: string;
     password: string;
-  }): Promise<Login> {
+  }): Promise<{ authCode: string; userName: string }> {
     const filter_stage = {
       userName: {
         $eq: authorization.username,
@@ -57,23 +86,28 @@ export class LoginRegisterService {
         $eq: authorization.password,
       },
     };
+
     try {
       const logInfo: Login = await this.loginModel.findOne(filter_stage);
+
       if (!logInfo) {
         throw new Error('Invalid Login');
       }
       logInfo.authCode = uuid().replace(/-/g, '');
 
       const newObj: any = new this.loginModel(logInfo);
+
       const savedObject = await newObj.save().catch((e) => {
         throw new Error(e.message);
       });
       if (!savedObject) {
-        throw new Error(`Can't able to login`);
+        throw new Error(`Can't able to authenticate`);
       }
-      return logInfo;
+      console.log('savedObject ', savedObject);
+      return { authCode: savedObject.authCode, userName: savedObject.userName };
     } catch (e) {
-      throw e;
+      console.log('================Login Service==================', e);
+      throw new Error(e.message);
     }
   }
   async changePass(passObj: {
@@ -107,7 +141,7 @@ export class LoginRegisterService {
       }
       return 'Successfuly changed password. Login to continue';
     } catch (e) {
-      throw e;
+      throw new Error('Something Went wrong.');
     }
   }
 }
