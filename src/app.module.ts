@@ -12,6 +12,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MetadataController } from './controlers/metadata.controller';
 import { MetaDataModule } from './modules/metadata.module';
 import { LoginImpl } from './models/Login';
+import { AccessService } from './services/access.service';
 // mongodb+srv://hotnest:Passw0rd2022@cluster0.9fdjzyb.mongodb.net/?retryWrites=true&w=majority
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { LoginImpl } from './models/Login';
     ),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AccessService],
+  exports: [AccessService],
 })
 export class AppModule {}

@@ -4,11 +4,12 @@ import { ItemController } from '../controlers/item.controller';
 import { ItemService } from '../services/item.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EmployeeModule } from './employee.module';
+import { AccessService } from 'src/services/access.service';
 
 @Module({
   imports: [MongooseModule.forFeature([ItemImpl]), EmployeeModule],
   controllers: [ItemController],
   exports: [ItemService],
-  providers: [ItemService],
+  providers: [ItemService, AccessService],
 })
 export class ItemModule {}

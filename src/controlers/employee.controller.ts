@@ -6,12 +6,16 @@ import { Login } from 'src/models/Login';
 import { LoginRegisterService } from 'src/services/login-register.service';
 import { EmployeeService } from '../services/employee.service';
 import { Request } from 'express';
+import { ModeOperation } from 'src/models/enum/Mode';
 
 @Controller('employee')
 export class EmployeeController extends BaseController<
   Employee,
   EmployeeService
 > {
+  onRequest(headers: any, mode: ModeOperation): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
   async onAdd(record: Employee) {
     if (record.isCurrent == null || record.isCurrent == undefined) {
       if (record.dateOfExist.toString().trim()) {

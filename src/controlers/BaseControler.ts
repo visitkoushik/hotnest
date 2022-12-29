@@ -8,18 +8,25 @@ import {
   Req,
   Res,
   Headers,
+  Inject,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AppResponse } from 'src/models/AppResponse';
+import { ModeOperation } from 'src/models/enum/Mode';
 import { Roles } from 'src/models/enum/Roles';
+import { EmployeeService } from 'src/services/employee.service';
 import { BaseService } from '../services/BaseServices';
 
 export abstract class BaseController<
   TClass,
   TService extends BaseService<TClass>,
 > {
+  @Inject(EmployeeService)
+  public readonly empService: EmployeeService;
+
   private readonly service: TService;
   private record: TClass;
+
   constructor(service: TService) {
     this.service = service;
   }
@@ -33,6 +40,8 @@ export abstract class BaseController<
     const record: TClass = request.body;
     return record;
   }
+
+  abstract onRequest(headers: any, mode: ModeOperation): Promise<boolean>;
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
   async onError(record: TClass) {}
 
@@ -42,6 +51,9 @@ export abstract class BaseController<
     @Req() request: Request,
     @Headers() headers,
   ) {
+    if (!(await this.CheckAccesRight(headers, response))) {
+      return;
+    }
     try {
       this.record = await this.beforeProcessRequest(request);
       const modifiedRecord: TClass = await this.onAdd(this.record);
@@ -94,15 +106,22 @@ export abstract class BaseController<
     @Req() request: Request,
     @Headers() headers,
   ) {
+    if (!(await this.CheckAccesRight(headers, response))) {
+      return;
+    }
     await this.findAllAsQuery(response, request);
   }
 
   @Get('lists/:id')
   async findById(
     @Res() response: Response,
+    @Req() request: Request,
     @Param('id') id,
     @Headers() headers,
   ) {
+    if (!(await this.CheckAccesRight(headers, response))) {
+      return;
+    }
     const generatedResult: AppResponse<TClass | string> =
       await this.service.findById(id);
     if (generatedResult.status == 1) {
@@ -119,6 +138,9 @@ export abstract class BaseController<
     @Param('id') id,
     @Headers() headers,
   ) {
+    if (!(await this.CheckAccesRight(headers, response))) {
+      return;
+    }
     this.record = await this.beforeProcessRequest(request);
     const generatedResult: AppResponse<TClass | string> =
       await this.service.update(this.record, id);
@@ -147,4 +169,21 @@ export abstract class BaseController<
       response.status(HttpStatus.NOT_FOUND).json(generatedResult);
     }
   }
+
+  public getEmpService(): EmployeeService {
+    return this.empService;
+  }
+
+  private CheckAccesRight = async (headers: any, response: Response) => {
+    let right = false;
+    try {
+      right = await this.onRequest(headers, ModeOperation.POST);
+      if (!right) {
+        response.status(HttpStatus.UNAUTHORIZED).json('User not authorized');
+      }
+    } catch (e) {
+      response.status(HttpStatus.UNAUTHORIZED).json(e.message);
+    }
+    return right;
+  };
 }
