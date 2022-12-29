@@ -13,6 +13,8 @@ import { UserType } from 'src/models/enum/UserType';
 import { Roles } from 'src/models/enum/Roles';
 import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
+import { Employee } from 'src/models/Employee';
+import { LoginRegisterService } from 'src/services/login-register.service';
 @Controller('billing')
 export class BillingController extends BaseController<Billing, BillingService> {
   constructor(
@@ -114,4 +116,27 @@ export class BillingController extends BaseController<Billing, BillingService> {
     }
     super.findAllAsQuery(response, request, filter_stage);
   }
+
+  // async validateAuth(authCode: string): Promise<Roles> {
+  //   if (authCode) {
+  //     const loginUser = await this.loginService
+  //       .findByAuthCode(authCode)
+  //       .catch((e) => {
+  //         return null;
+  //       });
+
+  //     if (loginUser) {
+  //       const user: Employee = await this.empService
+  //         .findByLoginId(loginUser.id + '')
+  //         .catch((e) => {
+  //           return null;
+  //         });
+  //       if (user) {
+  //         return user.roles;
+  //       }
+  //       return Roles.ZERO;
+  //     }
+  //   }
+  //   return Roles.ZERO;
+  // }
 }

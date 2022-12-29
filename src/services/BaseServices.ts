@@ -1,5 +1,6 @@
 import { Model, PopulateOptions } from 'mongoose';
 import { AppResponse } from 'src/models/AppResponse';
+import { BaseEntity } from 'src/models/BaseEntity';
 
 export abstract class BaseService<TClass> {
   private model: Model<TClass>;
@@ -31,7 +32,6 @@ export abstract class BaseService<TClass> {
   }
 
   async findAll(query, isPopulate?: boolean): Promise<AppResponse<TClass[]>> {
-    console.log(query);
     try {
       if (
         this.populate &&

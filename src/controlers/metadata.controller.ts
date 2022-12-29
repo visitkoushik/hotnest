@@ -11,14 +11,12 @@ import { LoginRegisterService } from 'src/services/login-register.service';
 
 @Controller('metadata')
 export class MetadataController {
-  constructor(
-    private readonly empService: EmployeeService,
-    private readonly loginService: LoginRegisterService,
-  ) {}
+  constructor(private readonly empService: EmployeeService) {}
 
   @Get()
-  async list(@Headers() headers, @Res() response: Response) {
+  async list(@Res() response: Response, @Headers() headers) {
     const authCode = headers['auth-code'];
+    console.log(headers);
     const filter_stage = {
       userType: {
         $eq: UserType.OWNER,
@@ -34,7 +32,7 @@ export class MetadataController {
       ownerNeedtocreate = true;
     }
 
-    const validatorResult = await this.validateAuth(authCode);
+    const validatorResult = await this.empService.validateAuth(authCode);
 
     response
       .status(HttpStatus.OK)
@@ -46,29 +44,4 @@ export class MetadataController {
         ),
       ); //
   }
-
-  private validateAuth = async (
-    authCode: string | null | undefined,
-  ): Promise<Roles> => {
-    if (authCode) {
-      const loginUser = await this.loginService
-        .findByAuthCode(authCode)
-        .catch((e) => {
-          return null;
-        });
-
-      if (loginUser) {
-        const user: Employee = await this.empService
-          .findByLoginId(loginUser.id + '')
-          .catch((e) => {
-            return null;
-          });
-        if (user) {
-          return user.roles;
-        }
-        return Roles.ZERO;
-      }
-    }
-    return Roles.ZERO;
-  };
 }

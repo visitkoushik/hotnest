@@ -5,12 +5,14 @@ import { Model } from 'mongoose';
 import { BaseService } from 'src/services/BaseServices';
 import { Login } from 'src/models/Login';
 import { Roles } from 'src/models/enum/Roles';
+import { LoginRegisterService } from './login-register.service';
 
 @Injectable()
 export class EmployeeService extends BaseService<Employee> {
   constructor(
     @InjectModel(Employee.name)
     private readonly employeeModel: Model<Employee>,
+    private readonly loginService: LoginRegisterService,
   ) {
     super(employeeModel, [
       {
@@ -37,5 +39,28 @@ export class EmployeeService extends BaseService<Employee> {
     } catch (e) {
       return e;
     }
+  }
+
+  async validateAuth(authCode: string): Promise<Roles> {
+    if (authCode) {
+      const loginUser = await this.loginService
+        .findByAuthCode(authCode)
+        .catch((e) => {
+          return null;
+        });
+
+      if (loginUser) {
+        const user: Employee = await this.findByLoginId(
+          loginUser.id + '',
+        ).catch((e) => {
+          return null;
+        });
+        if (user) {
+          return user.roles;
+        }
+        return Roles.ZERO;
+      }
+    }
+    return Roles.ZERO;
   }
 }

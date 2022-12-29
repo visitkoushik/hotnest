@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Employee } from 'src/models/Employee';
+import { Roles } from 'src/models/enum/Roles';
 import { Login } from 'src/models/Login';
 import { v4 as uuid } from 'uuid';
+import { EmployeeService } from './employee.service';
 
 @Injectable()
 export class LoginRegisterService {
@@ -11,7 +14,7 @@ export class LoginRegisterService {
     private readonly loginModel: Model<Login>,
   ) {}
 
-  async findByAuthCode(authCode: string): Promise<Login> {
+  public async findByAuthCode(authCode: string): Promise<Login> {
     const filter_stage = {
       authCode: {
         $eq: authCode,

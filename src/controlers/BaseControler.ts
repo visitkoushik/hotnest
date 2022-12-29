@@ -7,9 +7,11 @@ import {
   Put,
   Req,
   Res,
+  Headers,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AppResponse } from 'src/models/AppResponse';
+import { Roles } from 'src/models/enum/Roles';
 import { BaseService } from '../services/BaseServices';
 
 export abstract class BaseController<
@@ -22,6 +24,7 @@ export abstract class BaseController<
     this.service = service;
   }
 
+  // abstract validateAuth(authCode: string | null | undefined): Promise<Roles>;
   async onAdd(record: TClass): Promise<TClass> {
     return record;
   }
@@ -34,7 +37,11 @@ export abstract class BaseController<
   async onError(record: TClass) {}
 
   @Post('add')
-  async add(@Res() response: Response, @Req() request: Request) {
+  async add(
+    @Res() response: Response,
+    @Req() request: Request,
+    @Headers() headers,
+  ) {
     try {
       this.record = await this.beforeProcessRequest(request);
       const modifiedRecord: TClass = await this.onAdd(this.record);
@@ -85,9 +92,42 @@ export abstract class BaseController<
   async findAll(
     @Res() response: Response,
     @Req() request: Request,
-    query?: any,
+    @Headers() headers,
   ) {
     await this.findAllAsQuery(response, request);
+  }
+
+  @Get('lists/:id')
+  async findById(
+    @Res() response: Response,
+    @Param('id') id,
+    @Headers() headers,
+  ) {
+    const generatedResult: AppResponse<TClass | string> =
+      await this.service.findById(id);
+    if (generatedResult.status == 1) {
+      response.status(HttpStatus.OK).json(generatedResult);
+    } else {
+      response.status(HttpStatus.NOT_FOUND).json(generatedResult);
+    }
+  }
+
+  @Put('/:id')
+  async update(
+    @Res() response: Response,
+    @Req() request: Request,
+    @Param('id') id,
+    @Headers() headers,
+  ) {
+    this.record = await this.beforeProcessRequest(request);
+    const generatedResult: AppResponse<TClass | string> =
+      await this.service.update(this.record, id);
+    if (generatedResult.status == 1) {
+      response.status(HttpStatus.OK).json(generatedResult);
+    } else {
+      this.onError(this.record);
+      response.status(HttpStatus.NOT_FOUND).json(generatedResult);
+    }
   }
 
   async findAllAsQuery(
@@ -104,30 +144,6 @@ export abstract class BaseController<
     if (generatedResult.status == 1) {
       response.status(HttpStatus.OK).json(generatedResult);
     } else {
-      response.status(HttpStatus.NOT_FOUND).json(generatedResult);
-    }
-  }
-
-  @Get('lists/:id')
-  async findById(@Res() response, @Param('id') id) {
-    const generatedResult: AppResponse<TClass | string> =
-      await this.service.findById(id);
-    if (generatedResult.status == 1) {
-      response.status(HttpStatus.OK).json(generatedResult);
-    } else {
-      response.status(HttpStatus.NOT_FOUND).json(generatedResult);
-    }
-  }
-
-  @Put('/:id')
-  async update(@Res() response, @Req() request: Request, @Param('id') id) {
-    this.record = await this.beforeProcessRequest(request);
-    const generatedResult: AppResponse<TClass | string> =
-      await this.service.update(this.record, id);
-    if (generatedResult.status == 1) {
-      response.status(HttpStatus.OK).json(generatedResult);
-    } else {
-      this.onError(this.record);
       response.status(HttpStatus.NOT_FOUND).json(generatedResult);
     }
   }
