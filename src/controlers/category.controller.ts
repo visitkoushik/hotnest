@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { BaseController } from 'src/controlers/BaseControler';
 import { Category } from 'src/models/Category';
 import { Genders } from 'src/models/enum/Genders';
@@ -17,7 +18,7 @@ export class CategoryController extends BaseController<
     const r: Roles = await this.empService.validateAuth(authCode);
     const listOfPrev: string[] =
       this.accessService.accessList[r.toString().toUpperCase()];
-    console.log(r.toString().toUpperCase(), listOfPrev);
+
     return (
       listOfPrev.findIndex(
         (e: string) =>
@@ -38,5 +39,25 @@ export class CategoryController extends BaseController<
     private readonly accessService: AccessService,
   ) {
     super(moduleService);
+  }
+
+  async findAllAsQuery(response: Response, request: Request) {
+    const available: boolean | null =
+      request.query.available === 'true'
+        ? true
+        : request.query.available === 'false'
+        ? false
+        : null;
+
+    let filter_stage = {};
+    if (available != null) {
+      filter_stage = {
+        available: {
+          $eq: available,
+        },
+      };
+    }
+
+    super.findAllAsQuery(response, request, filter_stage);
   }
 }

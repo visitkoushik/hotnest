@@ -17,7 +17,7 @@ export class CustomerController extends BaseController<
     const r: Roles = await this.empService.validateAuth(authCode);
     const listOfPrev: string[] =
       this.accessService.accessList[r.toString().toUpperCase()];
-    console.log(r.toString().toUpperCase(), listOfPrev);
+
     return (
       listOfPrev.findIndex(
         (e: string) =>

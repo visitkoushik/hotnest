@@ -179,10 +179,14 @@ export abstract class BaseController<
     try {
       right = await this.onRequest(headers, ModeOperation.POST);
       if (!right) {
-        response.status(HttpStatus.UNAUTHORIZED).json('User not authorized');
+        response
+          .status(HttpStatus.UNAUTHORIZED)
+          .json(new AppResponse(0, null, 'User not authorized'));
       }
     } catch (e) {
-      response.status(HttpStatus.UNAUTHORIZED).json(e.message);
+      response
+        .status(HttpStatus.UNAUTHORIZED)
+        .json(new AppResponse(0, null, e.message));
     }
     return right;
   };

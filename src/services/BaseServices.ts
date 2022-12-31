@@ -31,43 +31,47 @@ export abstract class BaseService<TClass> {
     }
   }
 
-  async findAll(query, isPopulate?: boolean): Promise<AppResponse<TClass[]>> {
+  async findAll(
+    query?: any,
+    isPopulate?: boolean,
+    select?: any,
+    populateQuery?: any,
+  ): Promise<AppResponse<TClass[]>> {
     try {
+      const queryObject = this.model.find(query).select(select);
+      let list: TClass[];
       if (
-        this.populate &&
+        (this.populate || populateQuery) &&
         (isPopulate == null || isPopulate == undefined || isPopulate == true)
       ) {
-        const list: TClass[] = await this.model
-          .find({ ...query })
-          .populate(this.populate);
-
-        return new AppResponse(1, list, null);
+        list = await queryObject.populate(populateQuery || this.populate);
       } else {
-        const list: TClass[] = await this.model.find({ ...query }).exec();
-
-        return new AppResponse(1, list, null);
+        list = await queryObject.exec();
       }
+      return new AppResponse(1, list, null);
     } catch (e) {
       console.log('catchs', e);
       return new AppResponse(0, null, e.toString());
     }
   }
 
-  async findById(id: string): Promise<AppResponse<TClass>> {
+  async findById(
+    id: string,
+    select?: any,
+    populateQuery?: any,
+  ): Promise<AppResponse<TClass>> {
     try {
-      if (this.populate) {
-        const record: any = await this.model
-          .findById(id)
-          .populate(this.populate);
-        // const record: TClass = list.length ? list[0] : [];
-        if (record != null) {
-          return new AppResponse(1, record, null);
-        } else {
-          return new AppResponse(0, null, 'Record Not Found');
-        }
+      const queryObject = this.model.findById(id).select(select);
+      let record: any;
+      if (this.populate || populateQuery) {
+        record = await queryObject.populate(populateQuery || this.populate);
       } else {
-        const record: TClass = await this.model.findById(id).exec();
+        record = await queryObject.exec();
+      }
+      if (record != null) {
         return new AppResponse(1, record, null);
+      } else {
+        return new AppResponse(0, null, 'Record Not Found');
       }
     } catch (e) {
       return new AppResponse(0, null, e.toString());

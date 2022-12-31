@@ -1,4 +1,5 @@
 import { Prop, Schema } from '@nestjs/mongoose';
+import { Exclude } from 'class-transformer';
 import * as mongoose from 'mongoose';
 import { BaseEntity } from './BaseEntity';
 import { BaseSchema } from './BaseSchema';
@@ -19,6 +20,9 @@ export class Item extends BaseEntity {
   })
   category: mongoose.Schema.Types.ObjectId;
 
+  @Prop({
+    required: true,
+  })
   @Prop({ required: true })
   itemPrice: ItemPrice;
 
