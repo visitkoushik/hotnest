@@ -10,23 +10,24 @@ import { Request, Response } from 'express';
 import { CategoryService } from 'src/services/categor.service';
 
 import * as mongoose from 'mongoose';
+import { HeaderState } from 'src/models/enum/HeaderState';
 
 @Controller('item')
 export class ItemController extends BaseController<Item, ItemService> {
   @Inject(CategoryService)
   private readonly categoryService: CategoryService;
-  async onRequest(headers: any, mode: ModeOperation): Promise<boolean> {
+  async onRequest(headers: any, mode: ModeOperation): Promise<HeaderState> {
     const authCode = headers['auth-code'];
     const r: Roles = await this.empService.validateAuth(authCode);
     const listOfPrev: string[] =
       this.accessService.accessList[r.toString().toUpperCase()];
 
-    return (
-      listOfPrev.findIndex(
-        (e: string) =>
-          e == Item.name.toUpperCase() + '_' + mode.toString().toUpperCase(),
-      ) > -1
-    );
+    return listOfPrev.findIndex(
+      (e: string) =>
+        e == Item.name.toUpperCase() + '_' + mode.toString().toUpperCase(),
+    ) > -1
+      ? HeaderState.TRUE
+      : HeaderState.FALSE;
   }
   async onAdd(item: Item) {
     if (item.available == null || item.available == undefined) {
@@ -48,30 +49,30 @@ export class ItemController extends BaseController<Item, ItemService> {
         : request.query.available === 'false'
         ? false
         : null;
-
+    console.log('available', available);
     let filter_stage = {};
     if (available != null) {
       filter_stage = {
         available: {
-          $eq: true,
+          $eq: available,
         },
       };
+
+      const listCategories = (
+        await this.categoryService.findAll(filter_stage, false, 'id')
+      ).responseObject; //?.map((e) => e.id);
+
+      const listOfIDOfActiveCategory = listCategories.map((e: any) =>
+        e._id.toString(),
+      );
+
+      filter_stage = {
+        available: {
+          $eq: available,
+        },
+        category: { $in: listOfIDOfActiveCategory },
+      };
     }
-    const listCategories = (
-      await this.categoryService.findAll(filter_stage, false, 'id')
-    ).responseObject; //?.map((e) => e.id);
-
-    const listOfIDOfActiveCategory = listCategories.map((e: any) =>
-      e._id.toString(),
-    );
-
-    filter_stage = {
-      available: {
-        $eq: true,
-      },
-      category: { $in: listOfIDOfActiveCategory },
-    };
-
     super.findAllAsQuery(response, request, filter_stage);
   }
 }

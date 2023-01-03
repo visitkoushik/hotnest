@@ -7,14 +7,41 @@ import { LoginRegisterService } from 'src/services/login-register.service';
 import { EmployeeService } from '../services/employee.service';
 import { Request } from 'express';
 import { ModeOperation } from 'src/models/enum/Mode';
+import { Roles } from 'src/models/enum/Roles';
+import { AccessService } from 'src/services/access.service';
+import { HeaderState } from 'src/models/enum/HeaderState';
 
 @Controller('employee')
 export class EmployeeController extends BaseController<
   Employee,
   EmployeeService
 > {
-  onRequest(headers: any, mode: ModeOperation): Promise<boolean> {
-    throw new Error('Method not implemented.');
+  async onRequest(headers: any, mode: ModeOperation): Promise<HeaderState> {
+    const listAllSuperAdmins: Employee[] | null = (
+      await this.empService.findAll(
+        {
+          roles: { $eq: Roles.SUPERADMIN.toString() },
+        },
+        false,
+      )
+    ).responseObject;
+
+    if (!listAllSuperAdmins || listAllSuperAdmins.length === 0) {
+      return HeaderState.BYPASS;
+    }
+    const authCode = headers['auth-code'];
+
+    const r: Roles = await this.empService.validateAuth(authCode);
+
+    const listOfPrev: string[] =
+      this.accessService.accessList[r.toString().toUpperCase()];
+
+    return listOfPrev.findIndex(
+      (e: string) =>
+        e == Employee.name.toUpperCase() + '_' + mode.toString().toUpperCase(),
+    ) > -1
+      ? HeaderState.TRUE
+      : HeaderState.FALSE;
   }
   async onAdd(record: Employee) {
     if (record.isCurrent == null || record.isCurrent == undefined) {
@@ -30,12 +57,27 @@ export class EmployeeController extends BaseController<
   constructor(
     private readonly appService: EmployeeService,
     private readonly userServc: LoginRegisterService,
+    private readonly accessService: AccessService,
   ) {
     super(appService);
   }
 
   async beforeProcessRequest(request: Request): Promise<Employee> {
     const record: EmployeeReq = request.body;
+    const empList: Employee[] | null = (
+      await this.empService.findAll(
+        {
+          roles: { $eq: Roles.SUPERADMIN.toString() },
+        },
+        false,
+      )
+    ).responseObject;
+    if (
+      (!empList || empList.length === 0) &&
+      record.roles !== Roles.SUPERADMIN
+    ) {
+      throw new Error("Can't add Employee Information");
+    }
     const login: Login = await this.RegisterUser(record);
     try {
       const cloneRecord: EmployeeReq = { ...record };
@@ -44,7 +86,7 @@ export class EmployeeController extends BaseController<
         emp.loginInfo = login.id;
         return emp;
       } else {
-        throw new Error("Can't add Employee Login Information");
+        throw new Error("Can't add Employee Information");
       }
     } catch (e) {
       throw new Error(e.toString());

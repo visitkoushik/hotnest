@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { BaseController } from 'src/controlers/BaseControler';
 import { Category } from 'src/models/Category';
 import { Genders } from 'src/models/enum/Genders';
+import { HeaderState } from 'src/models/enum/HeaderState';
 import { ModeOperation } from 'src/models/enum/Mode';
 import { Roles } from 'src/models/enum/Roles';
 import { AccessService } from 'src/services/access.service';
@@ -13,19 +14,18 @@ export class CategoryController extends BaseController<
   Category,
   CategoryService
 > {
-  async onRequest(headers: any, mode: ModeOperation): Promise<boolean> {
+  async onRequest(headers: any, mode: ModeOperation): Promise<HeaderState> {
     const authCode = headers['auth-code'];
     const r: Roles = await this.empService.validateAuth(authCode);
     const listOfPrev: string[] =
       this.accessService.accessList[r.toString().toUpperCase()];
 
-    return (
-      listOfPrev.findIndex(
-        (e: string) =>
-          e ==
-          Category.name.toUpperCase() + '_' + mode.toString().toUpperCase(),
-      ) > -1
-    );
+    return listOfPrev.findIndex(
+      (e: string) =>
+        e == Category.name.toUpperCase() + '_' + mode.toString().toUpperCase(),
+    ) > -1
+      ? HeaderState.TRUE
+      : HeaderState.FALSE;
   }
   async onAdd(record: Category) {
     if (record.available == undefined || record.available == null) {

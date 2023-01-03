@@ -12,6 +12,8 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AppResponse } from 'src/models/AppResponse';
+import { Employee } from 'src/models/Employee';
+import { HeaderState } from 'src/models/enum/HeaderState';
 import { ModeOperation } from 'src/models/enum/Mode';
 import { Roles } from 'src/models/enum/Roles';
 import { EmployeeService } from 'src/services/employee.service';
@@ -41,7 +43,7 @@ export abstract class BaseController<
     return record;
   }
 
-  abstract onRequest(headers: any, mode: ModeOperation): Promise<boolean>;
+  abstract onRequest(headers: any, mode: ModeOperation): Promise<HeaderState>;
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
   async onError(record: TClass) {}
 
@@ -51,11 +53,23 @@ export abstract class BaseController<
     @Req() request: Request,
     @Headers() headers,
   ) {
-    if (!(await this.CheckAccesRight(headers, response))) {
+    const state: HeaderState = await this.CheckAccesRight(headers, response);
+
+    if (state == HeaderState.FALSE) {
       return;
+    } else if (state == HeaderState.BYPASS) {
+      try {
+        const body: Employee = request.body;
+        if (body.roles !== Roles.SUPERADMIN) {
+          return;
+        }
+      } catch {
+        throw new Error('Something went wrong');
+      }
     }
     try {
       this.record = await this.beforeProcessRequest(request);
+      // console.log(this.record);
       const modifiedRecord: TClass = await this.onAdd(this.record);
       const generatedResult: AppResponse<TClass | string> =
         await this.service.insert(modifiedRecord);
@@ -106,7 +120,9 @@ export abstract class BaseController<
     @Req() request: Request,
     @Headers() headers,
   ) {
-    if (!(await this.CheckAccesRight(headers, response))) {
+    const state: HeaderState = await this.CheckAccesRight(headers, response);
+
+    if (state != HeaderState.TRUE) {
       return;
     }
     await this.findAllAsQuery(response, request);
@@ -119,7 +135,9 @@ export abstract class BaseController<
     @Param('id') id,
     @Headers() headers,
   ) {
-    if (!(await this.CheckAccesRight(headers, response))) {
+    const state: HeaderState = await this.CheckAccesRight(headers, response);
+
+    if (state == HeaderState.FALSE) {
       return;
     }
     const generatedResult: AppResponse<TClass | string> =
@@ -138,7 +156,9 @@ export abstract class BaseController<
     @Param('id') id,
     @Headers() headers,
   ) {
-    if (!(await this.CheckAccesRight(headers, response))) {
+    const state: HeaderState = await this.CheckAccesRight(headers, response);
+
+    if (state != HeaderState.TRUE) {
       return;
     }
     this.record = await this.beforeProcessRequest(request);
@@ -174,11 +194,14 @@ export abstract class BaseController<
     return this.empService;
   }
 
-  private CheckAccesRight = async (headers: any, response: Response) => {
-    let right = false;
+  private CheckAccesRight = async (
+    headers: any,
+    response: Response,
+  ): Promise<HeaderState> => {
+    let state: HeaderState;
     try {
-      right = await this.onRequest(headers, ModeOperation.POST);
-      if (!right) {
+      state = await this.onRequest(headers, ModeOperation.POST);
+      if (state == HeaderState.FALSE) {
         response
           .status(HttpStatus.UNAUTHORIZED)
           .json(new AppResponse(0, null, 'User not authorized'));
@@ -188,6 +211,6 @@ export abstract class BaseController<
         .status(HttpStatus.UNAUTHORIZED)
         .json(new AppResponse(0, null, e.message));
     }
-    return right;
+    return state;
   };
 }

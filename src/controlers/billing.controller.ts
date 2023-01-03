@@ -16,9 +16,10 @@ import { ParsedQs } from 'qs';
 import { Employee } from 'src/models/Employee';
 import { LoginRegisterService } from 'src/services/login-register.service';
 import { ModeOperation } from 'src/models/enum/Mode';
+import { HeaderState } from 'src/models/enum/HeaderState';
 @Controller('billing')
 export class BillingController extends BaseController<Billing, BillingService> {
-  onRequest(headers: any, mode: ModeOperation): Promise<boolean> {
+  onRequest(headers: any, mode: ModeOperation): Promise<HeaderState> {
     throw new Error('Method not implemented.');
   }
   constructor(
