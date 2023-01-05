@@ -10,7 +10,6 @@ export type LoginDocument = Login & Document;
 export class Login extends BaseEntity {
   @Prop({ required: false })
   authCode: string;
-
   @Prop({ required: true, minlength: 8, maxlength: 50 })
   passcode: string;
 

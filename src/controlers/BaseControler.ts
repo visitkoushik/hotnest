@@ -9,6 +9,7 @@ import {
   Res,
   Headers,
   Inject,
+  Delete,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AppResponse } from 'src/models/AppResponse';
@@ -47,13 +48,35 @@ export abstract class BaseController<
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
   async onError(record: TClass) {}
 
-  @Post('add')
+  async findAllAsQuery(
+    @Res() response: Response,
+    @Req() request: Request,
+    query?: any,
+  ) {
+    const generatedResult: AppResponse<TClass[] | string> =
+      await this.pagingRequest(
+        request,
+        await this.service.findAll({ ...query }),
+      );
+
+    if (generatedResult.status == 1) {
+      response.status(HttpStatus.OK).json(generatedResult);
+    } else {
+      response.status(HttpStatus.NOT_FOUND).json(generatedResult);
+    }
+  }
+
+  @Post()
   async add(
     @Res() response: Response,
     @Req() request: Request,
     @Headers() headers,
   ) {
-    const state: HeaderState = await this.CheckAccesRight(headers, response);
+    const state: HeaderState = await this.CheckAccesRight(
+      headers,
+      response,
+      ModeOperation.POST,
+    );
 
     if (state == HeaderState.FALSE) {
       return;
@@ -87,7 +110,101 @@ export abstract class BaseController<
         .json(new AppResponse<string>(0, null, e.message));
     }
   }
+  @Get()
+  async findAll(
+    @Res() response: Response,
+    @Req() request: Request,
+    @Headers() headers,
+  ) {
+    const state: HeaderState = await this.CheckAccesRight(
+      headers,
+      response,
+      ModeOperation.GET,
+    );
 
+    if (state != HeaderState.TRUE) {
+      return;
+    }
+    await this.findAllAsQuery(response, request);
+  }
+
+  @Get('/:id')
+  async findById(
+    @Res() response: Response,
+    @Req() request: Request,
+    @Param('id') id,
+    @Headers() headers,
+  ) {
+    const state: HeaderState = await this.CheckAccesRight(
+      headers,
+      response,
+      ModeOperation.GET,
+    );
+
+    if (state == HeaderState.FALSE) {
+      return;
+    }
+    const generatedResult: AppResponse<TClass | string> =
+      await this.service.findById(id);
+    if (generatedResult.status == 1) {
+      response.status(HttpStatus.OK).json(generatedResult);
+    } else {
+      response.status(HttpStatus.NOT_FOUND).json(generatedResult);
+    }
+  }
+
+  @Put('/:id')
+  async update(
+    @Res() response: Response,
+    @Req() request: Request,
+    @Param('id') id,
+    @Headers() headers,
+  ) {
+    const state: HeaderState = await this.CheckAccesRight(
+      headers,
+      response,
+      ModeOperation.PUT,
+    );
+
+    if (state != HeaderState.TRUE) {
+      return;
+    }
+    this.record = await this.beforeProcessRequest(request);
+    const generatedResult: AppResponse<TClass | string> =
+      await this.service.update(this.record, id);
+    if (generatedResult.status == 1) {
+      response.status(HttpStatus.OK).json(generatedResult);
+    } else {
+      this.onError(this.record);
+      response.status(HttpStatus.NOT_FOUND).json(generatedResult);
+    }
+  }
+
+  @Delete('/:id')
+  async delete(@Res() response, @Param('id') id, @Headers() headers) {
+    const state: HeaderState = await this.CheckAccesRight(
+      headers,
+      response,
+      ModeOperation.DELETE,
+    );
+
+    if (state != HeaderState.TRUE) {
+      return;
+    }
+
+    this.service
+      .delete(id)
+      .then((e) => {
+        response
+          .status(HttpStatus.OK)
+          .json(new AppResponse(1, 'Record deleted', null));
+      })
+      .catch((e) => {
+        response
+          .status(HttpStatus.NOT_MODIFIED)
+          .json(new AppResponse(0, null, `Can't able to delete`));
+      });
+  }
   async pagingRequest(
     request: Request,
     params: AppResponse<TClass[] | string>,
@@ -114,93 +231,15 @@ export abstract class BaseController<
     }
     return params;
   }
-  @Get('lists')
-  async findAll(
-    @Res() response: Response,
-    @Req() request: Request,
-    @Headers() headers,
-  ) {
-    const state: HeaderState = await this.CheckAccesRight(headers, response);
 
-    if (state != HeaderState.TRUE) {
-      return;
-    }
-    await this.findAllAsQuery(response, request);
-  }
-
-  @Get('lists/:id')
-  async findById(
-    @Res() response: Response,
-    @Req() request: Request,
-    @Param('id') id,
-    @Headers() headers,
-  ) {
-    const state: HeaderState = await this.CheckAccesRight(headers, response);
-
-    if (state == HeaderState.FALSE) {
-      return;
-    }
-    const generatedResult: AppResponse<TClass | string> =
-      await this.service.findById(id);
-    if (generatedResult.status == 1) {
-      response.status(HttpStatus.OK).json(generatedResult);
-    } else {
-      response.status(HttpStatus.NOT_FOUND).json(generatedResult);
-    }
-  }
-
-  @Put('/:id')
-  async update(
-    @Res() response: Response,
-    @Req() request: Request,
-    @Param('id') id,
-    @Headers() headers,
-  ) {
-    const state: HeaderState = await this.CheckAccesRight(headers, response);
-
-    if (state != HeaderState.TRUE) {
-      return;
-    }
-    this.record = await this.beforeProcessRequest(request);
-    const generatedResult: AppResponse<TClass | string> =
-      await this.service.update(this.record, id);
-    if (generatedResult.status == 1) {
-      response.status(HttpStatus.OK).json(generatedResult);
-    } else {
-      this.onError(this.record);
-      response.status(HttpStatus.NOT_FOUND).json(generatedResult);
-    }
-  }
-
-  async findAllAsQuery(
-    @Res() response: Response,
-    @Req() request: Request,
-    query?: any,
-  ) {
-    const generatedResult: AppResponse<TClass[] | string> =
-      await this.pagingRequest(
-        request,
-        await this.service.findAll({ ...query }),
-      );
-
-    if (generatedResult.status == 1) {
-      response.status(HttpStatus.OK).json(generatedResult);
-    } else {
-      response.status(HttpStatus.NOT_FOUND).json(generatedResult);
-    }
-  }
-
-  public getEmpService(): EmployeeService {
-    return this.empService;
-  }
-
-  private CheckAccesRight = async (
+  public CheckAccesRight = async (
     headers: any,
     response: Response,
+    mode: ModeOperation,
   ): Promise<HeaderState> => {
     let state: HeaderState;
     try {
-      state = await this.onRequest(headers, ModeOperation.POST);
+      state = await this.onRequest(headers, mode);
       if (state == HeaderState.FALSE) {
         response
           .status(HttpStatus.UNAUTHORIZED)

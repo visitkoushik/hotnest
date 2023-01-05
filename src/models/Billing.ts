@@ -27,7 +27,6 @@ export class Billing extends BaseEntity {
 
   @Prop({
     required: [true, 'Billnumber required'],
-    unique: [true, 'Duplicate bill number. try again'],
   })
   billNumber: string;
 
@@ -37,10 +36,10 @@ export class Billing extends BaseEntity {
   @Prop({ required: false })
   isDiscountInPercentage: boolean;
 
-  @Prop({ required: false, default: 0 })
+  @Prop({ required: true, default: 0 })
   Ptotal: number;
 
-  @Prop({ required: false, default: 0 })
+  @Prop({ required: true, default: 0 })
   Stotal: number;
 
   @Prop({ required: true, default: 0 })
@@ -51,5 +50,5 @@ export class Billing extends BaseEntity {
 }
 
 export const schema = BaseSchema.createForClass(Billing);
-
+schema.index({ billNumber: 1, billingDate: 1 }, { unique: true });
 export const billingImpl = { name: Billing.name, schema };

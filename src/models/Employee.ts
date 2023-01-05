@@ -21,7 +21,7 @@ export class Employee extends Person {
   isCurrent: boolean;
 
   @Prop({ ref: Login.name, required: false })
-  loginInfo: mongoose.Schema.Types.ObjectId;
+  login: mongoose.Schema.Types.ObjectId;
 }
 
 export const EmployeeSchema = BaseSchema.createForClass(Employee);

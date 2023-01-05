@@ -1,15 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Res, Headers, HttpStatus } from '@nestjs/common';
 import { BaseController } from 'src/controlers/BaseControler';
 import { Employee } from 'src/models/Employee';
 import { EmployeeReq } from 'src/models/EmployeeReq';
+import { Person } from 'src/models/Person';
 import { Login } from 'src/models/Login';
 import { LoginRegisterService } from 'src/services/login-register.service';
 import { EmployeeService } from '../services/employee.service';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { ModeOperation } from 'src/models/enum/Mode';
 import { Roles } from 'src/models/enum/Roles';
 import { AccessService } from 'src/services/access.service';
 import { HeaderState } from 'src/models/enum/HeaderState';
+import { AppResponse } from 'src/models/AppResponse';
 
 @Controller('employee')
 export class EmployeeController extends BaseController<
@@ -83,7 +85,7 @@ export class EmployeeController extends BaseController<
       const cloneRecord: EmployeeReq = { ...record };
       if (login) {
         const emp: Employee = cloneRecord as unknown as Employee;
-        emp.loginInfo = login.id;
+        emp.login = login.id;
         return emp;
       } else {
         throw new Error("Can't add Employee Information");
@@ -99,5 +101,35 @@ export class EmployeeController extends BaseController<
     l.passcode = empReq.passcode;
     l.active = true;
     return this.userServc.insert(l);
+  }
+
+  @Get('profile')
+  async getProfile(@Res() response: Response, @Headers() headers) {
+    const authCode = headers['auth-code'];
+    if (authCode) {
+      const user: Employee = await this.empService.getUserByAuthCode(authCode);
+      if (user) {
+        delete user.salary;
+        const responseUser = {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          middleName: user.middleName,
+          mobileNumbers: user.mobileNumbers,
+          email: user.email,
+          gender: user.gender,
+          roles: user.roles,
+          dateOfBirth: user.dateOfBirth,
+          userType: user.userType,
+          dateOfJoin: user.dateOfJoin,
+          login: user.login,
+        };
+        return response
+          .status(HttpStatus.OK)
+          .json(new AppResponse<any>(1, responseUser, null));
+      }
+    }
+    return response
+      .status(HttpStatus.OK)
+      .json(new AppResponse<Employee>(0, null, 'No user found'));
   }
 }

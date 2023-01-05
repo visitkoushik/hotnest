@@ -38,7 +38,7 @@ export abstract class BaseService<TClass> {
     populateQuery?: any,
   ): Promise<AppResponse<TClass[]>> {
     try {
-      const queryObject = this.model.find(query).select(select);
+      const queryObject = this.model.find(query || {});
       let list: TClass[];
       if (
         (this.populate || populateQuery) &&
@@ -57,13 +57,17 @@ export abstract class BaseService<TClass> {
 
   async findById(
     id: string,
+    isPopulate?: boolean,
     select?: any,
     populateQuery?: any,
   ): Promise<AppResponse<TClass>> {
     try {
       const queryObject = this.model.findById(id).select(select);
       let record: any;
-      if (this.populate || populateQuery) {
+      if (
+        (this.populate || populateQuery) &&
+        (isPopulate == null || isPopulate == undefined || isPopulate == true)
+      ) {
         record = await queryObject.populate(populateQuery || this.populate);
       } else {
         record = await queryObject.exec();
@@ -74,7 +78,7 @@ export abstract class BaseService<TClass> {
         return new AppResponse(0, null, 'Record Not Found');
       }
     } catch (e) {
-      return new AppResponse(0, null, e.toString());
+      return new AppResponse(0, null, e.message);
     }
   }
 
@@ -98,14 +102,18 @@ export abstract class BaseService<TClass> {
         return new AppResponse(0, null, 'Record Not Found');
       }
     } catch (e) {
-      return new AppResponse(0, null, ' e.toString()');
+      return new AppResponse(0, null, e.message);
     }
   }
 
   async delete(id: string): Promise<any> {
     try {
-      await this.model.findByIdAndRemove(id);
-      return new AppResponse(1, 'Element successfuly removed', null);
+      const deletedrecord = await this.model.findByIdAndRemove(id);
+      if (!deletedrecord) {
+        return new AppResponse(0, null, 'Record not found');
+      } else {
+        return new AppResponse(1, 'Element successfuly removed', null);
+      }
     } catch {
       return new AppResponse(0, null, 'Something went wrong');
     }

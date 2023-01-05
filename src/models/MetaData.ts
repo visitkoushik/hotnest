@@ -1,3 +1,4 @@
+import { AccessService } from 'src/services/access.service';
 import { Genders } from './enum/Genders';
 import { Roles } from './enum/Roles';
 import { UserType } from './enum/UserType';
@@ -8,74 +9,22 @@ class Menu {
 export class MetaData {
   private menuItems = [];
   private accessList = {};
-  constructor(public ownerNeedtocreate, public rolesShared: Roles) {
-    this.accessList[Roles.SUPERADMIN] = [
-      'ITEM_ADD',
-      'ITEM_READ',
-      'ITEM_UPDATE',
-      'CATEGORY_ADD',
-      'CATEGORY_UPDATE',
-      'CATEGORY_READ',
-      'EMPLOYEE_ADD',
-      'EMPLOYEE_UPDATE',
-      'EMPLOYEE_READ',
-      'BILLING_ADD',
-      'BILLING_UPDATE',
-      'BILLING_READ',
-      'CUSTOMER_ADD',
-      'CUSTOMER_UPDATE',
-      'CUSTOMER_READ',
-      'LOGIN_READ',
-      'LOGIN_UPDATE',
-      'LOGIN_ADD',
-    ];
 
-    this.accessList[Roles.ADMIN] = [
-      'ITEM_ADD',
-      'ITEM_READ',
-      'ITEM_UPDATE',
-      'CATEGORY_ADD',
-      'CATEGORY_UPDATE',
-      'CATEGORY_READ',
-      'EMPLOYEE_READ',
-      'BILLING_ADD',
-      'BILLING_UPDATE',
-      'BILLING_READ',
-      'CUSTOMER_ADD',
-      'CUSTOMER_UPDATE',
-      'CUSTOMER_READ',
-      'LOGIN_READ',
-    ];
-    this.accessList[Roles.CLIENT] = [
-      'ITEM_READ',
-      'BILLING_READ',
-      'CATEGORY_READ',
-    ];
-    this.accessList[Roles.EMP] = [
-      'ITEM_READ',
-      'CATEGORY_READ',
-      'BILLING_ADD',
-      'BILLING_UPDATE',
-      'BILLING_READ',
-      'CUSTOMER_ADD',
-      'CUSTOMER_UPDATE',
-      'CUSTOMER_READ',
-    ];
-    this.accessList[Roles.INVENTORYREAD] = [
-      'ITEM_READ',
-      'CATEGORY_READ',
-      'BILLING_READ',
-    ];
+  constructor(
+    public ownerNeedtocreate,
+    public rolesShared: Roles,
+    public accessService: AccessService,
+  ) {
+    const keys: string[] = Object.keys(this.accessService.accessList);
 
-    this.accessList[Roles.READ] = [
-      'ITEM_READ',
-      'CATEGORY_READ',
-      'EMPLOYEE_READ',
-      'BILLING_READ',
-      'CUSTOMER_READ',
-    ];
-
-    this.accessList[Roles.ZERO] = [];
+    keys.forEach((k) => {
+      this.accessList[k] = this.accessService.accessList[k].map((m) => {
+        return m
+          .replace('_POST', '_ADD')
+          .replace('_PUT', '_UPDATE')
+          .replace('_GET', '_READ');
+      });
+    });
   }
   private getMenuItem = () => {
     this.menuItems.push(new Menu('appsettings', 'App Settings'));

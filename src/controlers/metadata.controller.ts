@@ -6,12 +6,16 @@ import { Employee } from 'src/models/Employee';
 import { Roles } from 'src/models/enum/Roles';
 import { UserType } from 'src/models/enum/UserType';
 import { MetaData } from 'src/models/MetaData';
+import { AccessService } from 'src/services/access.service';
 import { EmployeeService } from 'src/services/employee.service';
 import { LoginRegisterService } from 'src/services/login-register.service';
 
 @Controller('metadata')
 export class MetadataController {
-  constructor(private readonly empService: EmployeeService) {}
+  constructor(
+    private readonly empService: EmployeeService,
+    private readonly accessService: AccessService,
+  ) {}
 
   @Get()
   async list(@Res() response: Response, @Headers() headers) {
@@ -39,7 +43,11 @@ export class MetadataController {
       .json(
         new AppResponse(
           1,
-          new MetaData(ownerNeedtocreate, validatorResult).getMenu(),
+          new MetaData(
+            ownerNeedtocreate,
+            validatorResult,
+            this.accessService,
+          ).getMenu(),
           null,
         ),
       ); //

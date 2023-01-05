@@ -25,23 +25,40 @@ export class EmployeeService extends BaseService<Employee> {
 
   async findByLoginId(loginInfo: string): Promise<Employee> {
     const filter_stage = {
-      loginInfo: {
+      login: {
         $eq: loginInfo,
       },
     };
 
     try {
-      const employee: Employee = await this.employeeModel.findOne(filter_stage);
+      const queryObject = this.employeeModel.find(filter_stage);
+      const employee: Employee[] = await queryObject.populate([
+        {
+          path: Login.name.toLowerCase(),
+          model: Login.name,
+          select: 'userName -_id',
+          options: { strictPopulate: false },
+        },
+      ]);
+
       if (!employee) {
         throw new Error('Invalid LoginInfo');
       }
-      return employee;
+      return employee[0];
     } catch (e) {
       return e;
     }
   }
 
   async validateAuth(authCode: string): Promise<Roles> {
+    const user: Employee = await this.getUserByAuthCode(authCode);
+    if (user) {
+      return user.roles;
+    }
+    return Roles.ZERO;
+  }
+
+  async getUserByAuthCode(authCode: string): Promise<Employee> {
     if (authCode) {
       const loginUser = await this.loginService
         .findByAuthCode(authCode)
@@ -56,11 +73,10 @@ export class EmployeeService extends BaseService<Employee> {
           return null;
         });
         if (user) {
-          return user.roles;
+          return user;
         }
-        return Roles.ZERO;
       }
     }
-    return Roles.ZERO;
+    return null;
   }
 }

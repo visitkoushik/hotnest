@@ -2,7 +2,7 @@ import { BillingItem } from 'src/models/BillingItem';
 import { Person } from 'src/models/Person';
 import { Customer } from './Customer';
 
-export class BillingReq extends Person {
+export class BillingReq {
   billingItemList: BillingItem[];
 
   billingDate: Date;
@@ -17,7 +17,13 @@ export class BillingReq extends Person {
 
   Stotal: number;
 
-  castomerInfo: Customer;
+  customer: Customer;
 
   itemCount: number;
+
+  paid: number;
+
+  tax: number;
+
+  id?: string;
 }

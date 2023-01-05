@@ -4,7 +4,7 @@ import { Roles } from 'src/models/enum/Roles';
 
 @Injectable()
 export class AccessService {
-  accessList = {};
+  public accessList = {};
 
   constructor() {
     this.accessList[Roles.SUPERADMIN] = [
@@ -19,6 +19,7 @@ export class AccessService {
       'EMPLOYEE_GET',
       'BILLING_POST',
       'BILLING_PUT',
+      'BILLING_DELETE',
       'BILLING_GET',
       'CUSTOMER_POST',
       'CUSTOMER_PUT',
@@ -38,6 +39,7 @@ export class AccessService {
       'EMPLOYEE_GET',
       'BILLING_POST',
       'BILLING_PUT',
+      'BILLING_DELETE',
       'BILLING_GET',
       'CUSTOMER_POST',
       'CUSTOMER_PUT',
