@@ -20,7 +20,6 @@ export class MetadataController {
   @Get()
   async list(@Res() response: Response, @Headers() headers) {
     const authCode = headers['auth-code'];
-    console.log(headers);
     const filter_stage = {
       userType: {
         $eq: UserType.OWNER,

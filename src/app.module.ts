@@ -13,6 +13,10 @@ import { MetadataController } from './controlers/metadata.controller';
 import { MetaDataModule } from './modules/metadata.module';
 import { LoginImpl } from './models/Login';
 import { AccessService } from './services/access.service';
+
+import { ReportsController } from './controlers/reports.controller';
+import { ReportsModule } from './modules/reports.module';
+import { Reports } from './services/reports/reports';
 // mongodb+srv://hotnest:Passw0rd2022@cluster0.9fdjzyb.mongodb.net/?retryWrites=true&w=majority
 @Module({
   imports: [
@@ -23,12 +27,13 @@ import { AccessService } from './services/access.service';
     EmployeeModule,
     BillingModule,
     MetaDataModule,
+    ReportsModule,
     MongooseModule.forRoot(
       'mongodb+srv://hotnest:D0Ou3CmA0ouah0r2@cluster-hotnet.qtxxdxy.mongodb.net/test?retryWrites=true&w=majority',
     ),
   ],
   controllers: [AppController],
-  providers: [AppService, AccessService],
+  providers: [AppService, AccessService, Reports],
   exports: [AccessService],
 })
 export class AppModule {}

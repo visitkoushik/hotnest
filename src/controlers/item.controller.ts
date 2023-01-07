@@ -49,7 +49,6 @@ export class ItemController extends BaseController<Item, ItemService> {
         : request.query.available === 'false'
         ? false
         : null;
-    console.log('available', available);
     let filter_stage = {};
     if (available != null) {
       filter_stage = {

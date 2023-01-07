@@ -149,8 +149,8 @@ export class BillingController extends BaseController<Billing, BillingService> {
 
   async pagingRequest(
     request: Request,
-    params: AppResponse<Billing[] | string>,
-  ): Promise<AppResponse<Billing[] | string>> {
+    params: AppResponse<Billing[]>,
+  ): Promise<AppResponse<Billing[]>> {
     return super.pagingRequest(request, params);
   }
 
@@ -173,7 +173,33 @@ export class BillingController extends BaseController<Billing, BillingService> {
         },
       };
     }
-    super.findAllAsQuery(response, request, filter_stage);
+    const records: AppResponse<Billing[]> = await this.appService.findAll({
+      ...filter_stage,
+    });
+
+    const authCode: string = request.headers['auth-code'].toString();
+    const r: Roles = await this.empService.validateAuth(authCode);
+
+    const generatedResult: AppResponse<Billing[]> = await this.pagingRequest(
+      request,
+      records,
+    );
+
+    let profit = null;
+    if (r == Roles.SUPERADMIN || r == Roles.ADMIN) {
+      profit = 0;
+      records.responseObject.forEach((b: Billing) => {
+        profit += b.Stotal - b.Ptotal - b.discount;
+      });
+    }
+    if (generatedResult.status == 1) {
+      response.status(HttpStatus.OK).json({
+        ...generatedResult,
+        responseObject: { list: generatedResult.responseObject, profit },
+      });
+    } else {
+      response.status(HttpStatus.NOT_FOUND).json(generatedResult);
+    }
   }
 
   @Put('paydue/:id')

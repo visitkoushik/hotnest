@@ -53,11 +53,14 @@ export abstract class BaseController<
     @Req() request: Request,
     query?: any,
   ) {
-    const generatedResult: AppResponse<TClass[] | string> =
-      await this.pagingRequest(
-        request,
-        await this.service.findAll({ ...query }),
-      );
+    const records: AppResponse<TClass[]> = await this.service.findAll({
+      ...query,
+    });
+
+    const generatedResult: AppResponse<TClass[]> = await this.pagingRequest(
+      request,
+      records,
+    );
 
     if (generatedResult.status == 1) {
       response.status(HttpStatus.OK).json(generatedResult);
@@ -207,8 +210,8 @@ export abstract class BaseController<
   }
   async pagingRequest(
     request: Request,
-    params: AppResponse<TClass[] | string>,
-  ): Promise<AppResponse<TClass[] | string>> {
+    params: AppResponse<TClass[]>,
+  ): Promise<AppResponse<TClass[]>> {
     if (params.status === 1 && !(typeof params.responseObject == 'string')) {
       const requestQuery: any = request.query;
       const billing: TClass[] = params.responseObject;

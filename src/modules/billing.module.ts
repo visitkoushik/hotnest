@@ -6,6 +6,7 @@ import { BillingController } from '../controlers/billing.controller';
 import { BillingService } from '../services/billing.service';
 import { CustomerModule } from './customer.module';
 import { EmployeeModule } from './employee.module';
+import { ReportsModule } from './reports.module';
 
 @Module({
   imports: [

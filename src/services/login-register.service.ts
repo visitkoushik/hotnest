@@ -80,7 +80,7 @@ export class LoginRegisterService {
   async login(authorization: {
     username: string;
     password: string;
-  }): Promise<{ authCode: string; userName: string }> {
+  }): Promise<Login> {
     const filter_stage = {
       userName: {
         $eq: authorization.username,
@@ -107,7 +107,7 @@ export class LoginRegisterService {
         throw new Error(`Can't able to authenticate`);
       }
       console.log('savedObject ', savedObject);
-      return { authCode: savedObject.authCode, userName: savedObject.userName };
+      return logInfo;
     } catch (e) {
       console.log('================Login Service==================', e);
       throw new Error(e.message);
