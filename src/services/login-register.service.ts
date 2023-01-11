@@ -31,6 +31,24 @@ export class LoginRegisterService {
       throw e;
     }
   }
+
+  public async findByUserName(username: string): Promise<Login> {
+    const filter_stage = {
+      userName: {
+        $eq: username,
+      },
+    };
+
+    try {
+      const logInfo: Login = await this.loginModel.findOne(filter_stage);
+      if (!logInfo) {
+        throw new Error('Invalid user name ' + username);
+      }
+      return logInfo;
+    } catch (e) {
+      throw e;
+    }
+  }
   async insert(login: Login): Promise<Login> {
     if (login.active == undefined || login.active == null) {
       login.active = true;
@@ -113,14 +131,10 @@ export class LoginRegisterService {
       throw new Error(e.message);
     }
   }
-  async changePass(passObj: {
-    oldPassword: string;
-    newPassword: string;
-    authcode: string;
-  }) {
+  async changePass(oldPassword: string, newPassword: string, authcode: string) {
     const filter_stage = {
       authCode: {
-        $eq: passObj.authcode,
+        $eq: authcode,
       },
     };
 
@@ -129,11 +143,14 @@ export class LoginRegisterService {
       if (!logInfo) {
         throw new Error('Invalid authcode');
       }
-      if (logInfo.passcode !== passObj.oldPassword) {
+      if (logInfo.passcode !== oldPassword) {
         throw new Error('Old Password is not matching');
       }
+      if (logInfo.passcode === newPassword) {
+        throw new Error('New Password can not be same as old');
+      }
       logInfo.authCode = '';
-      logInfo.passcode = passObj.newPassword;
+      logInfo.passcode = newPassword;
 
       const newObj: any = new this.loginModel(logInfo);
       const savedObject = await newObj.save().catch((e) => {
@@ -143,6 +160,21 @@ export class LoginRegisterService {
         throw new Error(`Can't able to change password`);
       }
       return 'Successfuly changed password. Login to continue';
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  }
+
+  async resetPass(logInfo: Login) {
+    try {
+      const newObj: any = new this.loginModel(logInfo);
+      const savedObject = await newObj.save().catch((e) => {
+        throw new Error(e.message);
+      });
+      if (!savedObject) {
+        throw new Error(`Can't able to change password`);
+      }
+      return 'Successfuly changed password.';
     } catch (e) {
       throw new Error('Something Went wrong.');
     }

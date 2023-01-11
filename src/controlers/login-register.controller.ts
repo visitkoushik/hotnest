@@ -39,16 +39,4 @@ export class LoginRegisterController {
         .json(new AppResponse(0, null, e.message));
     }
   }
-
-  @Post('/changepassword')
-  async changePass(@Res() response: Response, @Req() request: Request) {
-    try {
-      const msg: string = await this.moduleService.changePass(request.body);
-      response.status(HttpStatus.OK).json(new AppResponse(1, msg, null));
-    } catch (e) {
-      response
-        .status(HttpStatus.UNAUTHORIZED)
-        .json(new AppResponse(0, null, e.message));
-    }
-  }
 }

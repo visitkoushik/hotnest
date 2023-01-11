@@ -48,6 +48,13 @@ export abstract class BaseController<
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
   async onError(record: TClass) {}
 
+  modifyResultAll = (response: AppResponse<TClass[]>) => {
+    return response;
+  };
+  modifyResultOne = (response: AppResponse<TClass>) => {
+    return response;
+  };
+
   async findAllAsQuery(
     @Res() response: Response,
     @Req() request: Request,
@@ -63,7 +70,9 @@ export abstract class BaseController<
     );
 
     if (generatedResult.status == 1) {
-      response.status(HttpStatus.OK).json(generatedResult);
+      response
+        .status(HttpStatus.OK)
+        .json(this.modifyResultAll(generatedResult));
     } else {
       response.status(HttpStatus.NOT_FOUND).json(generatedResult);
     }
@@ -147,10 +156,13 @@ export abstract class BaseController<
     if (state == HeaderState.FALSE) {
       return;
     }
-    const generatedResult: AppResponse<TClass | string> =
-      await this.service.findById(id);
+    const generatedResult: AppResponse<TClass> = await this.service.findById(
+      id,
+    );
     if (generatedResult.status == 1) {
-      response.status(HttpStatus.OK).json(generatedResult);
+      response
+        .status(HttpStatus.OK)
+        .json(this.modifyResultOne(generatedResult));
     } else {
       response.status(HttpStatus.NOT_FOUND).json(generatedResult);
     }

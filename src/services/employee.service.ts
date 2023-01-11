@@ -6,6 +6,7 @@ import { BaseService } from 'src/services/BaseServices';
 import { Login } from 'src/models/Login';
 import { Roles } from 'src/models/enum/Roles';
 import { LoginRegisterService } from './login-register.service';
+import { AppResponse } from 'src/models/AppResponse';
 
 @Injectable()
 export class EmployeeService extends BaseService<Employee> {
@@ -22,7 +23,23 @@ export class EmployeeService extends BaseService<Employee> {
       },
     ]);
   }
-
+  async findByLoginUserName(username: string): Promise<Employee> {
+    try {
+      const login: Login = await this.loginService.findByUserName(username);
+      if (login) {
+        const filter_stage = {
+          login: {
+            $eq: login.id,
+          },
+        };
+        const emp: Employee = await this.employeeModel.findOne(filter_stage);
+        return emp;
+      }
+      throw new Error(`Can't find Login info`);
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  }
   async findByLoginId(loginInfo: string): Promise<Employee> {
     const filter_stage = {
       login: {
@@ -78,5 +95,42 @@ export class EmployeeService extends BaseService<Employee> {
       }
     }
     return null;
+  }
+
+  async update(
+    record: Employee,
+    id: string,
+  ): Promise<AppResponse<string | Employee>> {
+    return super.update(record, record.id.toString());
+  }
+
+  async changePass(
+    oldPassword: string,
+    newPassword: string,
+    authcode: string,
+  ): Promise<string> {
+    try {
+      return this.loginService.changePass(oldPassword, newPassword, authcode);
+    } catch (e) {
+      throw new Error('Something Went Wrong');
+    }
+  }
+
+  async restPass(userName: string, newPassword: string): Promise<string> {
+    try {
+      const empLoginInfo: Login = await this.loginService.findByUserName(
+        userName,
+      );
+      if (newPassword.length < 8) {
+        throw new Error('Password minimum length should be 8 ');
+      }
+      if (!empLoginInfo) {
+        throw new Error('Invalid User Name');
+      }
+      empLoginInfo.passcode = newPassword;
+      return this.loginService.resetPass(empLoginInfo);
+    } catch (e) {
+      throw new Error(e.message);
+    }
   }
 }

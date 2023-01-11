@@ -1,4 +1,12 @@
-import { Controller, Get, Res, Headers, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Res,
+  Headers,
+  HttpStatus,
+  Post,
+  Req,
+} from '@nestjs/common';
 import { BaseController } from 'src/controlers/BaseControler';
 import { Employee } from 'src/models/Employee';
 import { EmployeeReq } from 'src/models/EmployeeReq';
@@ -12,6 +20,8 @@ import { Roles } from 'src/models/enum/Roles';
 import { AccessService } from 'src/services/access.service';
 import { HeaderState } from 'src/models/enum/HeaderState';
 import { AppResponse } from 'src/models/AppResponse';
+import { Genders } from 'src/models/enum/Genders';
+import { UserType } from 'src/models/enum/UserType';
 
 @Controller('employee')
 export class EmployeeController extends BaseController<
@@ -65,6 +75,14 @@ export class EmployeeController extends BaseController<
   }
 
   async beforeProcessRequest(request: Request): Promise<Employee> {
+    if (request.method === 'POST') {
+      return this.preAddEmployee(request);
+    } else if (request.method === 'PUT') {
+      return this.preUpdateEmployee(request);
+    }
+  }
+
+  private preAddEmployee = async (request: Request): Promise<Employee> => {
     const record: EmployeeReq = request.body;
     const empList: Employee[] | null = (
       await this.empService.findAll(
@@ -93,7 +111,44 @@ export class EmployeeController extends BaseController<
     } catch (e) {
       throw new Error(e.toString());
     }
-  }
+  };
+
+  private preUpdateEmployee = async (request: Request): Promise<Employee> => {
+    const record: Employee = request.body;
+    const authCode: string = request.headers['auth-code'].toString();
+    if (authCode) {
+      const ownerUser: Employee = await this.empService.getUserByAuthCode(
+        authCode,
+      );
+      const l: Login = record.login as unknown as Login;
+      const user: Employee = await this.empService.findByLoginUserName(
+        l.userName,
+      );
+      if (
+        ownerUser.roles === Roles.ADMIN ||
+        ownerUser.roles === Roles.SUPERADMIN
+      ) {
+        const cloneRecord: Employee = { ...record };
+        user.dateOfBirth = cloneRecord.dateOfBirth;
+        user.dateOfExist = cloneRecord.dateOfExist;
+        user.dateOfJoin = cloneRecord.dateOfJoin;
+        user.firstName = cloneRecord.firstName;
+        user.lastName = cloneRecord.lastName;
+        user.middleName = cloneRecord.middleName;
+        user.salary = cloneRecord.salary;
+        user.email = cloneRecord.email;
+        user.mobileNumbers = cloneRecord.mobileNumbers;
+        user.gender = Genders[cloneRecord.gender] || user.gender;
+        user.isCurrent = cloneRecord.isCurrent;
+        user.roles = Roles[cloneRecord.roles] || user.roles;
+        user.userType = UserType[cloneRecord.userType] || user.userType;
+        user.primaryAddressIndex = cloneRecord.primaryAddressIndex;
+
+        return user;
+      }
+    }
+    throw new Error("Can't update Employee Information");
+  };
 
   RegisterUser(empReq: EmployeeReq): Promise<Login> {
     const l: Login = {} as Login;
@@ -103,26 +158,48 @@ export class EmployeeController extends BaseController<
     return this.userServc.insert(l);
   }
 
+  modifyResultAll = (response: AppResponse<Employee[]>) => {
+    const resObj: any[] = response.responseObject.map((e: Employee) => {
+      {
+        const { id, passcode, authCode, active, ...l } = JSON.parse(
+          JSON.stringify(e.login),
+        );
+        e.login = { ...l };
+      }
+      const { id, ...filterdCloneObject } = JSON.parse(JSON.stringify(e));
+      return filterdCloneObject;
+    });
+
+    return { ...response, responseObject: resObj };
+  };
+  modifyResultOne = (response: AppResponse<Employee>) => {
+    const resObj = response.responseObject;
+    {
+      const { id, passcode, authCode, active, ...l } = JSON.parse(
+        JSON.stringify(resObj.login),
+      );
+      resObj.login = { ...l };
+    }
+    const { id, ...filterdCloneObject } = JSON.parse(JSON.stringify(resObj));
+    return filterdCloneObject;
+  };
+
   @Get('profile')
   async getProfile(@Res() response: Response, @Headers() headers) {
     const authCode = headers['auth-code'];
     if (authCode) {
       const user: Employee = await this.empService.getUserByAuthCode(authCode);
       if (user) {
-        delete user.salary;
-        const responseUser = {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          middleName: user.middleName,
-          mobileNumbers: user.mobileNumbers,
-          email: user.email,
-          gender: user.gender,
-          roles: user.roles,
-          dateOfBirth: user.dateOfBirth,
-          userType: user.userType,
-          dateOfJoin: user.dateOfJoin,
-          login: user.login,
-        };
+        {
+          const { id, passcode, authCode, active, ...l } = JSON.parse(
+            JSON.stringify(user.login),
+          );
+          user.login = { ...l };
+        }
+        const { id, dateOfExist, salary, ...responseUser } = JSON.parse(
+          JSON.stringify(user),
+        );
+
         return response
           .status(HttpStatus.OK)
           .json(new AppResponse<any>(1, responseUser, null));
@@ -131,5 +208,69 @@ export class EmployeeController extends BaseController<
     return response
       .status(HttpStatus.OK)
       .json(new AppResponse<Employee>(0, null, 'No user found'));
+  }
+
+  @Post('/changepassword')
+  async changePass(
+    @Res() response: Response,
+    @Req() request: Request,
+    @Headers() headers,
+  ) {
+    const passObj: { oldPassword: string; newPassword: string } = request.body;
+    try {
+      this.empService
+        .changePass(
+          passObj.oldPassword,
+          passObj.newPassword,
+          headers['auth-code'],
+        )
+        .then((msg: string) => {
+          response.status(HttpStatus.OK).json(new AppResponse(1, msg, null));
+        })
+        .catch((e) => {
+          response
+            .status(HttpStatus.BAD_REQUEST)
+            .json(new AppResponse(0, null, e.message));
+        });
+    } catch (e) {
+      response
+        .status(HttpStatus.UNAUTHORIZED)
+        .json(new AppResponse(0, null, e.message));
+    }
+  }
+
+  @Post('/resetpassword')
+  async resetPass(
+    @Res() response: Response,
+    @Req() request: Request,
+    @Headers() headers,
+  ) {
+    const state: HeaderState = await this.CheckAccesRight(
+      headers,
+      response,
+      ModeOperation.POST,
+    );
+
+    if (state !== HeaderState.TRUE) {
+      throw new Error('Something went wrong');
+    }
+
+    const passObj: { userName: string; newPassword: string } = request.body;
+    try {
+      await this.empService
+        .restPass(passObj.userName, passObj.newPassword)
+        .then((msg: string) => {
+          response.status(HttpStatus.OK).json(new AppResponse(1, msg, null));
+        })
+        .catch((e) => {
+          response
+            .status(HttpStatus.BAD_REQUEST)
+            .json(new AppResponse(0, null, e.message));
+        });
+    } catch (e) {
+      response
+        .status(HttpStatus.UNAUTHORIZED)
+        .json(new AppResponse(0, null, e.message));
+    }
   }
 }

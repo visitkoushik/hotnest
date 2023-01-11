@@ -29,27 +29,26 @@ export class MetaData {
   private getMenuItem = () => {
     this.menuItems.push(new Menu('appsettings', 'App Settings'));
     this.menuItems.push(new Menu('login', 'Login'));
+
     if (this.ownerNeedtocreate) {
       this.menuItems.push(new Menu('emp', 'Employee'));
     } else if (!this.ownerNeedtocreate) {
       if (
         this.rolesShared == Roles.SUPERADMIN ||
-        this.rolesShared == Roles.ADMIN
+        this.rolesShared == Roles.ADMIN ||
+        this.rolesShared == Roles.EMP
       ) {
-        this.menuItems.push(new Menu('reports', 'Reports'));
-        this.menuItems.push(new Menu('customer', 'Customer'));
-        this.menuItems.push(new Menu('config', 'Configure'));
-        this.menuItems.push(new Menu('emp', 'Employee'));
         this.menuItems.push(new Menu('bill', 'Bills'));
         this.menuItems.push(new Menu('item', 'Items'));
         this.menuItems.push(new Menu('logout', 'Logout'));
+        if (this.rolesShared !== Roles.EMP) {
+          // this.menuItems.push(new Menu('config', 'Configure'));
+          this.menuItems.push(new Menu('reports', 'Reports'));
+          this.menuItems.push(new Menu('customer', 'Customer'));
+          this.menuItems.push(new Menu('emp', 'Employee'));
+        }
       }
-      if (this.rolesShared == Roles.EMP) {
-        this.menuItems.push(new Menu('bill', 'Bills'));
-        this.menuItems.push(new Menu('item', 'Items'));
-        this.menuItems.push(new Menu('config', 'Configure'));
-        this.menuItems.push(new Menu('logout', 'Logout'));
-      }
+
       if (this.rolesShared !== Roles.ZERO) {
         this.menuItems.push(new Menu('profile', 'Profile'));
       }
