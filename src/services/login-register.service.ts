@@ -70,30 +70,30 @@ export class LoginRegisterService {
     });
     return savedObject;
   }
-  async logOut(authorization: { authcode: string }) {
+  async logOut(authcode: string): Promise<string> {
     const filter_stage = {
       authCode: {
-        $eq: authorization.authcode,
+        $eq: authcode,
       },
     };
-    try {
+    return new Promise(async (res, rej) => {
       const logInfo: Login = await this.loginModel.findOne(filter_stage);
       if (!logInfo) {
-        throw new Error('Invalid authcode');
-      }
-      logInfo.authCode = '';
+        rej('Invalid authcode');
+      } else {
+        logInfo.authCode = '';
 
-      const newObj: any = new this.loginModel(logInfo);
-      const savedObject = await newObj.save().catch((e) => {
-        throw new Error(e.message);
-      });
-      if (!savedObject) {
-        throw new Error(`Can't able to logout`);
+        const newObj: any = new this.loginModel(logInfo);
+        const savedObject = await newObj.save().catch((e) => {
+          rej(e.message);
+        });
+        if (!savedObject) {
+          rej(`Can't able to logout`);
+        } else {
+          res('Successfuly Logout');
+        }
       }
-      return 'Successfuly Logout';
-    } catch (e) {
-      throw e;
-    }
+    });
   }
   async login(authorization: {
     username: string;

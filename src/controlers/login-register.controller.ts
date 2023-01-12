@@ -6,6 +6,7 @@ import {
   Post,
   Req,
   Res,
+  Headers,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AppResponse } from 'src/models/AppResponse';
@@ -29,10 +30,23 @@ export class LoginRegisterController {
     }
   }
   @Post('/logout')
-  async logout(@Res() response: Response, @Req() request: Request) {
+  async logout(
+    @Res() response: Response,
+    @Req() request: Request,
+    @Headers() headers,
+  ) {
+    const authcode: string = headers['auth-code'];
     try {
-      const userlogin = await this.moduleService.logOut(request.body);
-      response.status(HttpStatus.OK).json(new AppResponse(1, userlogin, null));
+      this.moduleService
+        .logOut(authcode)
+        .then((e) => {
+          response.status(HttpStatus.OK).json(new AppResponse(1, e, null));
+        })
+        .catch((e) => {
+          response
+            .status(HttpStatus.UNAUTHORIZED)
+            .json(new AppResponse(0, null, e));
+        });
     } catch (e) {
       response
         .status(HttpStatus.UNAUTHORIZED)
