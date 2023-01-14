@@ -7,8 +7,8 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors();
 
-  app.useStaticAssets(resolve('./src/views'));
-  app.setBaseViewsDir(resolve('./src/views'));
+  app.useStaticAssets(resolve('./src/views/www'));
+  app.setBaseViewsDir(resolve('./src/views/www'));
   app.setViewEngine('hbs');
   await app.listen(process.env.PORT || 8010);
 }
