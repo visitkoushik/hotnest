@@ -13,7 +13,9 @@ export class LoginRegisterService {
     @InjectModel('Login')
     private readonly loginModel: Model<Login>,
   ) {}
-
+  get Model() {
+    return this.loginModel;
+  }
   public async findByAuthCode(authCode: string): Promise<Login> {
     const filter_stage = {
       authCode: {

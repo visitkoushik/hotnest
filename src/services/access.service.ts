@@ -27,6 +27,8 @@ export class AccessService {
       'LOGIN_GET',
       'LOGIN_PUT',
       'LOGIN_POST',
+
+      'REPORT_READ',
     ];
 
     this.accessList[Roles.ADMIN] = [
@@ -45,6 +47,7 @@ export class AccessService {
       'CUSTOMER_PUT',
       'CUSTOMER_GET',
       'LOGIN_GET',
+      'REPORT_READ',
     ];
     this.accessList[Roles.CLIENT] = ['ITEM_GET', 'BILLING_GET', 'CATEGORY_GET'];
     this.accessList[Roles.EMP] = [

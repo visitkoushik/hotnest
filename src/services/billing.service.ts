@@ -18,7 +18,7 @@ export class BillingService extends BaseService<Billing> {
     super(billingModel, [
       {
         path: Customer.name.toLowerCase(),
-        select: 'firstName lastName middleName gender',
+        select: 'firstName lastName middleName gender mobileNumbers -_id',
         options: { strictPopulate: false },
       },
     ]);

@@ -16,7 +16,7 @@ import { AccessService } from './services/access.service';
 
 import { ReportsController } from './controlers/reports.controller';
 import { ReportsModule } from './modules/reports.module';
-import { Reports } from './services/reports/reports';
+import { ReportService } from './services/report.service';
 // mongodb+srv://hotnest:Passw0rd2022@cluster0.9fdjzyb.mongodb.net/?retryWrites=true&w=majority
 @Module({
   imports: [
@@ -33,7 +33,7 @@ import { Reports } from './services/reports/reports';
     ),
   ],
   controllers: [AppController],
-  providers: [AppService, AccessService, Reports],
+  providers: [AppService, AccessService, ReportService],
   exports: [AccessService],
 })
 export class AppModule {}

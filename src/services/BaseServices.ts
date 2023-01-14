@@ -9,6 +9,10 @@ export abstract class BaseService<TClass> {
     this.model = model;
     this.populate = populate;
   }
+
+  get serviceModel() {
+    return this.model;
+  }
   public beforeInsert(record: TClass): TClass {
     return record;
   }

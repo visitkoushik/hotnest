@@ -32,9 +32,9 @@ import { Login } from 'src/models/Login';
 export class BillingController extends BaseController<Billing, BillingService> {
   async onRequest(headers: any, mode: ModeOperation): Promise<HeaderState> {
     const authCode = headers['auth-code'];
-    const r: Roles = await this.empService.validateAuth(authCode);
+    const role: Roles = await this.empService.validateAuth(authCode);
     const listOfPrev: string[] =
-      this.accessService.accessList[r.toString().toUpperCase()];
+      this.accessService.accessList[role.toString().toUpperCase()];
 
     return listOfPrev.findIndex(
       (e: string) =>

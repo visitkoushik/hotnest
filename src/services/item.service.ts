@@ -19,4 +19,7 @@ export class ItemService extends BaseService<Item> {
       },
     ]);
   }
+  get Model() {
+    return this.itemModel;
+  }
 }

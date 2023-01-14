@@ -5,7 +5,7 @@ import { Customer } from './Customer';
 export class BillingReq {
   billingItemList: BillingItem[];
 
-  billingDate: Date;
+  billingDate: string;
 
   billNumber: string;
 
