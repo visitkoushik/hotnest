@@ -21,9 +21,10 @@ export abstract class BaseService<TClass> {
     return record;
   }
   async insert(record: TClass): Promise<AppResponse<TClass>> {
-    const modifiedObject: any = this.beforeInsert(record);
-    const newObj = new this.model(modifiedObject);
     try {
+      const modifiedObject: any = this.beforeInsert(record);
+      const newObj = new this.model(modifiedObject);
+
       const savedObject: any = await newObj.save();
       if (savedObject) {
         const finalObject: any = this.afterInsert(savedObject);
