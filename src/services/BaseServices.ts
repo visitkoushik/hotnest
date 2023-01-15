@@ -1,6 +1,5 @@
 import { Model, PopulateOptions } from 'mongoose';
 import { AppResponse } from 'src/models/AppResponse';
-import { BaseEntity } from 'src/models/BaseEntity';
 
 export abstract class BaseService<TClass> {
   private model: Model<TClass>;
