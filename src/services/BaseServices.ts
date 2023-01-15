@@ -5,7 +5,7 @@ import { BaseEntity } from 'src/models/BaseEntity';
 export abstract class BaseService<TClass> {
   private model: Model<TClass>;
   private populate?: PopulateOptions[];
-  
+
   constructor(model: Model<TClass>, populate?: PopulateOptions[]) {
     this.model = model;
     this.populate = populate;
