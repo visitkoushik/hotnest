@@ -8,11 +8,7 @@
 </head>
 <body style="position: absolute;margin: auto;top: 0;bottom: 0;left: 0;right: 0;width: fit-content;height: fit-content;text-align: center;"
  onload="loadHome()">
-    <img src="./icon.png"/>
-    <h1>House Of Tea, it's HOT </h1>
-    
-    <p> {{ message }}</p>
-    <div id="content" style="background:red;min-width:50vh;min-height:50vh;"></div>
+     
 </body>
 <script>
     async function fetchHtmlAsText(url) {
@@ -21,9 +17,9 @@
 
 // this is your `load_home() function`
 async function loadHome() {
-    
-    const contentDiv = document.getElementById("content");
-    contentDiv.innerHTML = await fetchHtmlAsText("./main.html");
+    window.location.replace(window.location+"www");
+    // const contentDiv = document.getElementById("content");
+    // contentDiv.innerHTML = await fetchHtmlAsText("./main.html");
 }
 </script>
 </html>

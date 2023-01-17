@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { Employee } from 'src/models/Employee';
 import { Roles } from 'src/models/enum/Roles';
 import { Login, LoginDocument } from 'src/models/Login';
+import { LoginResp } from 'src/models/LoginResp';
 import { v4 as uuid } from 'uuid';
 import { EmployeeService } from './employee.service';
 
@@ -100,7 +101,7 @@ export class LoginRegisterService {
   async login(authorization: {
     username: string;
     password: string;
-  }): Promise<Login> {
+  }): Promise<LoginResp> {
     const filter_stage = {
       userName: {
         $eq: authorization.username,
@@ -126,8 +127,12 @@ export class LoginRegisterService {
       if (!savedObject) {
         throw new Error(`Can't able to authenticate`);
       }
-      console.log('savedObject ', savedObject);
-      return logInfo;
+
+      const { passcode, active, id, ...lrsp } = JSON.parse(
+        JSON.stringify(logInfo),
+      );
+      console.log('savedObject ', lrsp);
+      return lrsp;
     } catch (e) {
       console.log('================Login Service==================', e);
       throw new Error(e.message);
