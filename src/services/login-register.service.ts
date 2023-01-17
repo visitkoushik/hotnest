@@ -131,7 +131,7 @@ export class LoginRegisterService {
       const { passcode, active, id, ...lrsp } = JSON.parse(
         JSON.stringify(logInfo),
       );
-      console.log('savedObject ', lrsp);
+      // console.log('savedObject ', lrsp);
       return lrsp;
     } catch (e) {
       console.log('================Login Service==================', e);
