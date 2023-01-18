@@ -152,7 +152,7 @@ export class ReportService {
     const endTime = 'T23:59';
 
     let filter_stage = {};
-
+    console.log(filter_stage);
     if (startDt && endDt) {
       filter_stage = {
         billingDate: {
