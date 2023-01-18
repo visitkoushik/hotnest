@@ -36,6 +36,7 @@ export class MetadataController {
     }
 
     const validatorResult = await this.empService.validateAuth(authCode);
+    const user: Employee = await this.empService.getUserByAuthCode(authCode);
 
     response
       .status(HttpStatus.OK)
@@ -45,6 +46,7 @@ export class MetadataController {
           new MetaData(
             ownerNeedtocreate,
             validatorResult,
+            user,
             this.accessService,
           ).getMenu(),
           null,

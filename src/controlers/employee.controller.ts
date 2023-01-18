@@ -234,7 +234,7 @@ export class EmployeeController extends BaseController<
         });
     } catch (e) {
       response
-        .status(HttpStatus.UNAUTHORIZED)
+        .status(HttpStatus.NOT_ACCEPTABLE)
         .json(new AppResponse(0, null, e.message));
     }
   }

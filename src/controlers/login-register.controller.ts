@@ -25,7 +25,7 @@ export class LoginRegisterController {
     } catch (e) {
       console.log('================Login Controler==================', e);
       response
-        .status(HttpStatus.UNAUTHORIZED)
+        .status(HttpStatus.NOT_ACCEPTABLE)
         .json(new AppResponse(0, null, e.message));
     }
   }
@@ -49,7 +49,7 @@ export class LoginRegisterController {
         });
     } catch (e) {
       response
-        .status(HttpStatus.UNAUTHORIZED)
+        .status(HttpStatus.NOT_ACCEPTABLE)
         .json(new AppResponse(0, null, e.message));
     }
   }

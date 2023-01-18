@@ -1,4 +1,5 @@
 import { AccessService } from 'src/services/access.service';
+import { Employee } from './Employee';
 import { Genders } from './enum/Genders';
 import { Roles } from './enum/Roles';
 import { UserType } from './enum/UserType';
@@ -13,6 +14,7 @@ export class MetaData {
   constructor(
     public ownerNeedtocreate,
     public rolesShared: Roles,
+    public user: Employee,
     public accessService: AccessService,
   ) {
     const keys: string[] = Object.keys(this.accessService.accessList);
@@ -104,6 +106,7 @@ export class MetaData {
       roles: this.roles.filter((f) => f != null),
       userType: this.userType.filter((f) => f != null),
       ownerNeedtocreate: this.ownerNeedtocreate,
+      profile: this.user,
       accessRight: this.accessList[this.rolesShared],
     };
   }
