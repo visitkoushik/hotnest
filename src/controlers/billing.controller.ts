@@ -115,6 +115,8 @@ export class BillingController extends BaseController<Billing, BillingService> {
   async onError(record: Billing) {
     await this.customerService.delete(record.customer + '');
   }
+
+  
   @Put('/:id')
   async update(@Res() response, @Req() request: Request, @Param('id') id) {
     response
