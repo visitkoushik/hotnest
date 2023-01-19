@@ -126,6 +126,7 @@ export class ReportsController {
                   totalSell: billReport.totalSell,
                   totalCost: billReport.totalCost,
                   unPaid: billReport.unPaid,
+                  tax: billReport.tax,
                 },
                 null,
               ),

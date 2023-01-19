@@ -16,7 +16,7 @@ export class Billing extends BaseEntity {
   })
   billingItemList: BillingItem[];
 
-  @Prop({ required: true, default: Date.now })
+  @Prop({ required: true, default: new Date().toISOString() })
   billingDate: Date;
 
   @Prop({

@@ -7,6 +7,7 @@ export class ReportResp {
   totalSell: number;
   totalCost: number;
   unPaid: number;
+  tax: number;
 }
 
 export class ItemReport {

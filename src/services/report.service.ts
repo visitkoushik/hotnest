@@ -44,6 +44,7 @@ export class ReportService {
         let totalSell = 0;
         let totalCost = 0;
         let unPaid = 0;
+        let tax = 0;
 
         const reportFilter: ReportFilter = request.body;
         const dateRange: { start: string; end: string } = this.getDate(
@@ -63,10 +64,16 @@ export class ReportService {
           reportFilter,
         );
         billReport.forEach((b: BillingReport) => {
-          profit += b.Stotal - b.Ptotal - b.discount - (b.Stotal - b.paid);
+          profit +=
+            b.Stotal -
+            b.Ptotal -
+            b.discount -
+            (b.Stotal - b.paid) -
+            (b.tax || 0);
           unPaid += b.Stotal - b.paid;
           totalSell += b.Stotal;
           totalCost += b.Ptotal;
+          tax += b.tax || 0;
         });
 
         const resp: ReportResp = {} as ReportResp;
@@ -76,6 +83,7 @@ export class ReportService {
         resp.totalCost = totalCost;
         resp.unPaid = unPaid;
         resp.profit = profit;
+        resp.tax = tax;
         res(resp);
       } catch (e) {
         rej(e.message);
@@ -152,7 +160,7 @@ export class ReportService {
     const endTime = 'T23:59';
 
     let filter_stage = {};
-    console.log(filter_stage);
+
     if (startDt && endDt) {
       filter_stage = {
         billingDate: {
@@ -424,6 +432,7 @@ export class ReportService {
       billingReport.paid = (billingReport.paid || 0) + b.paid;
       billingReport.discount = (billingReport.discount || 0) + b.discount;
       billingReport.billingDate = key;
+      billingReport.billNumber = bills.length + '';
     });
     return billingReport;
   };

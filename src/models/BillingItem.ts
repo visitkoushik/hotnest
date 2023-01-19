@@ -26,7 +26,7 @@ export class BillingItem extends BaseEntity {
   isDiscountInPercentage: boolean;
 
   @Exclude()
-  @Prop({ default: Date.now })
+  @Prop({ default: new Date().toISOString() })
   date: Date;
 }
 
