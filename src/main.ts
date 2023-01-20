@@ -9,7 +9,6 @@ async function bootstrap() {
 
   app.useStaticAssets(resolve('./src/views/'));
   app.setBaseViewsDir(resolve('./src/views/'));
-  
 
   app.setViewEngine('hbs');
   await app.listen(process.env.PORT || 8010);
