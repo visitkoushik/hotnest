@@ -108,7 +108,6 @@ export class MetaData {
       ownerNeedtocreate: this.ownerNeedtocreate,
       profile: this.user,
       accessRight: this.accessList[this.rolesShared],
-      ENV: process.env,
     };
   }
 }
