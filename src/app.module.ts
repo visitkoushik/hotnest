@@ -17,6 +17,7 @@ import { AccessService } from './services/access.service';
 import { ReportsController } from './controlers/reports.controller';
 import { ReportsModule } from './modules/reports.module';
 import { ReportService } from './services/report.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 // mongodb+srv://hotnest:Passw0rd2022@cluster0.9fdjzyb.mongodb.net/?retryWrites=true&w=majority
 @Module({
   imports: [
@@ -28,9 +29,16 @@ import { ReportService } from './services/report.service';
     BillingModule,
     MetaDataModule,
     ReportsModule,
-    MongooseModule.forRoot(
-      'mongodb+srv://hotnest:D0Ou3CmA0ouah0r2@cluster-hotnet.qtxxdxy.mongodb.net/test?retryWrites=true&w=majority',
-    ),
+    // MongooseModule.forRoot(
+    //   `mongodb+srv://hotnest:D0Ou3CmA0ouah0r2@cluster-hotnet.qtxxdxy.mongodb.net/test?retryWrites=true&w=majority`,
+    // ),
+    MongooseModule.forRootAsync({
+      useFactory: async () => {
+        return {
+          uri: process.env['MONOGO_DB'], // Loaded from .ENV
+        };
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService, AccessService, ReportService],
