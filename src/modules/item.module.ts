@@ -7,12 +7,14 @@ import { EmployeeModule } from './employee.module';
 import { AccessService } from 'src/services/access.service';
 import { CategoryModule } from './categor.module';
 import { CategoryService } from 'src/services/categor.service';
+import { BranchModule } from './branch.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([ItemImpl]),
     EmployeeModule,
     CategoryModule,
+    BranchModule,
   ],
   controllers: [ItemController],
   exports: [ItemService],

@@ -22,6 +22,9 @@ export class Employee extends Person {
 
   @Prop({ ref: Login.name, required: false })
   login: mongoose.Schema.Types.ObjectId;
+
+  @Prop({ required: true })
+  branchCode: string;
 }
 
 export const EmployeeSchema = BaseSchema.createForClass(Employee);

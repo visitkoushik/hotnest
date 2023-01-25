@@ -29,7 +29,7 @@ export abstract class BaseController<
 
   private readonly service: TService;
   private record: TClass;
-
+  public branchCode = '0';
   constructor(service: TService) {
     this.service = service;
   }
@@ -128,6 +128,7 @@ export abstract class BaseController<
     @Req() request: Request,
     @Headers() headers,
   ) {
+    this.branchCode = (request.query.branchCode as string) || '0';
     const state: HeaderState = await this.CheckAccesRight(
       headers,
       response,
@@ -147,6 +148,7 @@ export abstract class BaseController<
     @Param('id') id,
     @Headers() headers,
   ) {
+    this.branchCode = (request.query.branchCode as string) || '0';
     const state: HeaderState = await this.CheckAccesRight(
       headers,
       response,

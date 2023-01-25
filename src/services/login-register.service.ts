@@ -134,7 +134,7 @@ export class LoginRegisterService {
       // console.log('savedObject ', lrsp);
       return lrsp;
     } catch (e) {
-      console.log('================Login Service==================', e);
+      // console.log('================Login Service==================', e);
       throw new Error(e.message);
     }
   }

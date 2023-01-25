@@ -72,7 +72,7 @@ export class ReportsController {
 
         return {
           billList: billRes,
-          totalPage: Math.ceil(billing.length / perPageRec),
+          totalPage: Math.ceil(billing.length),
           currentPage: page,
         };
       }

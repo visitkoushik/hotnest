@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import {
   Controller,
   Get,
@@ -56,6 +57,8 @@ export class EmployeeController extends BaseController<
       : HeaderState.FALSE;
   }
   async onAdd(record: Employee) {
+    record.branchCode =
+      record.roles == Roles.SUPERADMIN ? '0' : record.branchCode;
     if (record.isCurrent == null || record.isCurrent == undefined) {
       if (record.dateOfExist.toString().trim()) {
         record.isCurrent = false;
@@ -143,6 +146,8 @@ export class EmployeeController extends BaseController<
         user.roles = Roles[cloneRecord.roles] || user.roles;
         user.userType = UserType[cloneRecord.userType] || user.userType;
         user.primaryAddressIndex = cloneRecord.primaryAddressIndex;
+        user.branchCode =
+          cloneRecord.roles == Roles.SUPERADMIN ? '0' : cloneRecord.branchCode;
 
         return user;
       }
@@ -150,12 +155,20 @@ export class EmployeeController extends BaseController<
     throw new Error("Can't update Employee Information");
   };
 
-  RegisterUser(empReq: EmployeeReq): Promise<Login> {
-    const l: Login = {} as Login;
-    l.userName = empReq.userName;
-    l.passcode = empReq.passcode;
-    l.active = true;
-    return this.userServc.insert(l);
+  async RegisterUser(empReq: EmployeeReq): Promise<Login> {
+    const emp: Employee | void = await this.appService
+      .findByLoginUserName(empReq.userName)
+      .catch((e) => {});
+    if (!emp) {
+      const l: Login = {} as Login;
+      l.userName = empReq.userName;
+      l.passcode = empReq.passcode;
+      l.active = true;
+
+      return this.userServc.insert(l);
+    } else {
+      throw new Error(`Username ${empReq.userName} is already taken`);
+    }
   }
 
   modifyResultAll = (response: AppResponse<Employee[]>) => {

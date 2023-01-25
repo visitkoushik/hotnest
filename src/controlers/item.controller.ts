@@ -11,11 +11,16 @@ import { CategoryService } from 'src/services/categor.service';
 
 import * as mongoose from 'mongoose';
 import { HeaderState } from 'src/models/enum/HeaderState';
+import { BranchService } from 'src/services/branch.service';
+import { AppResponse } from 'src/models/AppResponse';
+import { Branch } from 'src/models/Branch';
 
 @Controller('item')
 export class ItemController extends BaseController<Item, ItemService> {
   @Inject(CategoryService)
   private readonly categoryService: CategoryService;
+  @Inject(BranchService)
+  private readonly branchService: BranchService;
   async onRequest(headers: any, mode: ModeOperation): Promise<HeaderState> {
     const authCode = headers['auth-code'];
     const r: Roles = await this.empService.validateAuth(authCode);
@@ -43,6 +48,7 @@ export class ItemController extends BaseController<Item, ItemService> {
   }
 
   async findAllAsQuery(response: Response, request: Request) {
+    let items: string[] = [];
     const available: boolean | null =
       request.query.available === 'true'
         ? true
@@ -60,17 +66,32 @@ export class ItemController extends BaseController<Item, ItemService> {
       const listCategories = (
         await this.categoryService.findAll(filter_stage, false, 'id')
       ).responseObject; //?.map((e) => e.id);
+      if (this.branchCode !== '0') {
+        const respItem: AppResponse<Branch> =
+          await this.branchService.findByBranchCode(this.branchCode);
 
+        items = respItem.responseObject?.items || [];
+      }
       const listOfIDOfActiveCategory = listCategories.map((e: any) =>
         e._id.toString(),
       );
 
-      filter_stage = {
-        available: {
-          $eq: available,
-        },
-        category: { $in: listOfIDOfActiveCategory },
-      };
+      if (this.branchCode !== '0') {
+        filter_stage = {
+          available: {
+            $eq: available,
+          },
+          category: { $in: listOfIDOfActiveCategory },
+          _id: { $in: [...items] },
+        };
+      } else {
+        filter_stage = {
+          available: {
+            $eq: available,
+          },
+          category: { $in: listOfIDOfActiveCategory },
+        };
+      }
     }
     super.findAllAsQuery(response, request, filter_stage);
   }

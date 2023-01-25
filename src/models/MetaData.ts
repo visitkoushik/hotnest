@@ -48,6 +48,9 @@ export class MetaData {
           this.menuItems.push(new Menu('reports', 'Reports'));
           this.menuItems.push(new Menu('customer', 'Customer'));
           this.menuItems.push(new Menu('emp', 'Employee'));
+          if (this.rolesShared != Roles.ADMIN) {
+            this.menuItems.push(new Menu('branch', 'Branches'));
+          }
         }
       }
 

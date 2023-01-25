@@ -6,6 +6,7 @@ import * as mongoose from 'mongoose';
 import { Category } from './Category';
 import { Item } from './Item';
 import { BaseEntity } from './BaseEntity';
+import { Branch } from './Branch';
 
 export type BillingDocument = Billing & mongoose.Document;
 @Schema()
@@ -47,6 +48,9 @@ export class Billing extends BaseEntity {
 
   @Prop({ required: true, default: 0 })
   tax: number;
+
+  @Prop({ required: true })
+  branchCode: string;
 }
 
 export const schema = BaseSchema.createForClass(Billing);

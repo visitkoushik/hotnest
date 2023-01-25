@@ -27,6 +27,9 @@ export class AccessService {
       'LOGIN_GET',
       'LOGIN_PUT',
       'LOGIN_POST',
+      'CHAIN_GET',
+      'CHAIN_PUT',
+      'CHAIN_POST',
 
       'REPORT_READ',
     ];
@@ -38,6 +41,8 @@ export class AccessService {
       'CATEGORY_POST',
       'CATEGORY_PUT',
       'CATEGORY_GET',
+      'EMPLOYEE_POST',
+      'EMPLOYEE_PUT',
       'EMPLOYEE_GET',
       'BILLING_POST',
       'BILLING_PUT',
@@ -47,6 +52,9 @@ export class AccessService {
       'CUSTOMER_PUT',
       'CUSTOMER_GET',
       'LOGIN_GET',
+      'LOGIN_PUT',
+      'LOGIN_POST',
+
       'REPORT_READ',
     ];
     this.accessList[Roles.CLIENT] = ['ITEM_GET', 'BILLING_GET', 'CATEGORY_GET'];
