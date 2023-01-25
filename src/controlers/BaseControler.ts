@@ -241,7 +241,7 @@ export abstract class BaseController<
         return {
           ...params,
           responseObject: billRes,
-          totalPage: Math.ceil(billing.length / perPageRec),
+          totalPage: Math.ceil(billing.length),
           currentPage: page,
         };
       }
