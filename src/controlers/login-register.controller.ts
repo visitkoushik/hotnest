@@ -23,7 +23,7 @@ export class LoginRegisterController {
       const userlogin = await this.moduleService.login(request.body);
       response.status(HttpStatus.OK).json(new AppResponse(1, userlogin, null));
     } catch (e) {
-      console.log('================Login Controler==================', e);
+      // console.log('================Login Controler==================', e);
       response
         .status(HttpStatus.NOT_ACCEPTABLE)
         .json(new AppResponse(0, null, e.message));
