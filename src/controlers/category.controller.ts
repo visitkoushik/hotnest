@@ -57,7 +57,14 @@ export class CategoryController extends BaseController<
         },
       };
     }
-
+    if (this.branchCode !== '0') {
+      filter_stage = {
+        ...filter_stage,
+        branchCode: {
+          $eq: this.branchCode,
+        },
+      };
+    }
     super.findAllAsQuery(response, request, filter_stage);
   }
 }

@@ -6,4 +6,5 @@ export class ReportFilter {
   paged?: boolean;
   count?: number;
   page?: number;
+  branchCode?: string;
 }

@@ -167,10 +167,20 @@ export class BillingController extends BaseController<Billing, BillingService> {
         startDt = dt.toString().split('T')[0] + 'T00:00';
         endDt = dt.toString().split('T')[0] + 'T23:59';
       }
+
       filter_stage = {
         billingDate: {
           $gte: startDt, //'2022-12-22T00:00',
           $lte: endDt, //'2022-12-22T23:59',
+        },
+      };
+    }
+
+    if (this.branchCode !== '0') {
+      filter_stage = {
+        ...filter_stage,
+        branchCode: {
+          $eq: this.branchCode,
         },
       };
     }

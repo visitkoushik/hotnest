@@ -52,9 +52,20 @@ export class ReportService {
           reportFilter.endDate,
           reportFilter.filterDateBy,
         );
+        const branchCode = reportFilter.branchCode || '0';
+        let filter_stage = {};
+        if (branchCode !== '0') {
+          filter_stage = {
+            ...filter_stage,
+            branchCode: {
+              $eq: branchCode,
+            },
+          };
+        }
         const allBills = await this.findByDateRange(
           dateRange.start,
           dateRange.end,
+          filter_stage,
         ).catch((e) => {
           rej(e);
         });
@@ -107,9 +118,20 @@ export class ReportService {
           reportFilter.endDate,
           reportFilter.filterDateBy,
         );
+        const branchCode = reportFilter.branchCode || '0';
+        let filter_stage = {};
+        if (branchCode !== '0') {
+          filter_stage = {
+            ...filter_stage,
+            branchCode: {
+              $eq: branchCode,
+            },
+          };
+        }
         const allBills = await this.findByDateRange(
           dateRange.start,
           dateRange.end,
+          filter_stage,
         ).catch((e) => {
           rej(e);
         });
@@ -155,14 +177,17 @@ export class ReportService {
     });
   };
 
-  findByDateRange = async (startDt, endDt): Promise<Billing[]> => {
+  findByDateRange = async (
+    startDt,
+    endDt,
+    filter_stage: any,
+  ): Promise<Billing[]> => {
     const startTime = 'T00:00';
     const endTime = 'T23:59';
 
-    let filter_stage = {};
-
     if (startDt && endDt) {
       filter_stage = {
+        ...filter_stage,
         billingDate: {
           $gte: startDt + startTime, //'2022-12-22T00:00',
           $lte: endDt + endTime, //'2022-12-22T23:59',

@@ -197,6 +197,19 @@ export class EmployeeController extends BaseController<
     return filterdCloneObject;
   };
 
+  async findAllAsQuery(response: Response, request: Request) {
+    let filter_stage = {};
+    if (this.branchCode !== '0') {
+      filter_stage = {
+        ...filter_stage,
+        branchCode: {
+          $eq: this.branchCode,
+        },
+      };
+    }
+    super.findAllAsQuery(response, request, filter_stage);
+  }
+
   @Get('profile')
   async getProfile(@Res() response: Response, @Headers() headers) {
     const authCode = headers['auth-code'];

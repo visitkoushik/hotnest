@@ -26,4 +26,6 @@ export class BillingReq {
   tax: number;
 
   id?: string;
+
+  branchCode: string;
 }
