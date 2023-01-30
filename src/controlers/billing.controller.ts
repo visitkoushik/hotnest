@@ -27,6 +27,7 @@ import { AccessService } from 'src/services/access.service';
 import { Employee } from 'src/models/Employee';
 import { LoginRegisterService } from 'src/services/login-register.service';
 import { Login } from 'src/models/Login';
+import { BillingItem } from 'src/models/BillingItem';
 
 @Controller('billing')
 export class BillingController extends BaseController<Billing, BillingService> {
@@ -69,6 +70,7 @@ export class BillingController extends BaseController<Billing, BillingService> {
       throw new Error("Can't add client");
     }
   }
+
   getBillingNumber = async (): Promise<string> => {
     const dt: string = new Date().toISOString().split('T')[0];
 
@@ -115,20 +117,6 @@ export class BillingController extends BaseController<Billing, BillingService> {
   async onError(record: Billing) {
     await this.customerService.delete(record.customer + '');
   }
-
-  @Put('/:id')
-  async update(@Res() response, @Req() request: Request, @Param('id') id) {
-    response
-      .status(HttpStatus.NOT_ACCEPTABLE)
-      .json(new AppResponse<string>(0, null, 'Update not Acceptable'));
-  }
-  // @Delete('/:id')
-  // async delete(@Res() response, @Param('id') id, @Headers() headers) {
-  //   console.log('UNACCEPTABLE');
-  //   response
-  //     .status(HttpStatus.NOT_ACCEPTABLE)
-  //     .json(new AppResponse<string>(0, null, 'Delete not Acceptable'));
-  // }
 
   private calculateTotal(record: BillingReq): BillingReq {
     record.Ptotal = 0;
@@ -226,6 +214,9 @@ export class BillingController extends BaseController<Billing, BillingService> {
       ModeOperation.PUT,
     );
     if (state != HeaderState.TRUE) {
+      response
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json(new AppResponse(0, null, 'Payment updated'));
       return;
     }
     const record: Billing = (await this.appService.findById(id)).responseObject;
@@ -235,11 +226,17 @@ export class BillingController extends BaseController<Billing, BillingService> {
       if (record.Stotal >= record.paid + paidAmount) {
         record.paid = record.paid + paidAmount;
 
+        const { customer, ...keyRecord } = JSON.parse(JSON.stringify(record));
+
         const grsp: AppResponse<Billing | string> =
-          await this.appService.update({ ...record }, id);
-        response
-          .status(HttpStatus.OK)
-          .json({ ...grsp, responseObject: 'Payment updated' });
+          await this.appService.update({ ...keyRecord }, id);
+        if (grsp.status == 1) {
+          response
+            .status(HttpStatus.OK)
+            .json({ ...grsp, responseObject: 'Payment updated' });
+        } else {
+          response.status(HttpStatus.NOT_ACCEPTABLE).json({ ...grsp });
+        }
       } else {
         response
           .status(HttpStatus.NOT_ACCEPTABLE)
@@ -257,6 +254,81 @@ export class BillingController extends BaseController<Billing, BillingService> {
       response
         .status(HttpStatus.NOT_FOUND)
         .json(new AppResponse(0, null, 'Bill is not exist'));
+    }
+  }
+
+  @Put('itemadd/:id')
+  async itemadd(
+    @Res() response: Response,
+    @Req() request: Request,
+    @Param('id') id,
+    @Headers() headers,
+  ) {
+    const state: HeaderState = await this.CheckAccesRight(
+      request.headers,
+      response,
+      ModeOperation.PUT,
+    );
+
+    if (state != HeaderState.TRUE) {
+      response
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json(new AppResponse(0, null, 'Payment updated'));
+      return;
+    }
+    const currentBillObject: Billing = (await this.appService.findById(id))
+      .responseObject;
+
+    if (currentBillObject) {
+      const dt: Date = new Date();
+      const billDt: Date = new Date(currentBillObject.billingDate);
+
+      if ((dt.valueOf() - billDt.valueOf()) / 1000 / 60 / 60 / 12 >= 1) {
+        response
+          .status(HttpStatus.NOT_ACCEPTABLE)
+          .json(
+            new AppResponse(0, null, 'Post 12 hours update is not possible'),
+          );
+        return;
+      }
+
+      const record: BillingReq = request.body;
+
+      const billitemList: BillingItem[] = [...record.billingItemList];
+      const currentBillitemList: BillingItem[] = [
+        ...JSON.parse(JSON.stringify(currentBillObject)).billingItemList,
+      ];
+
+      const newBillingItemList: BillingItem[] = [...currentBillitemList];
+      for (let i = 0; i < billitemList.length; i++) {
+        const index = currentBillitemList.findIndex(
+          (f) => f.itemID === billitemList[i].itemID,
+        );
+        if (index === -1) {
+          newBillingItemList.push(billitemList[i]);
+        } else {
+          newBillingItemList[index].itemCount += +billitemList[i].itemCount;
+        }
+      }
+
+      currentBillObject.billingItemList = [...newBillingItemList];
+      this.calculateTotal(currentBillObject as unknown as BillingReq);
+      currentBillObject.paid = record.paid;
+      const { customer, ...keyRecord } = JSON.parse(
+        JSON.stringify(currentBillObject),
+      );
+      // const billing: Billing = currentBillObject as unknown as Billing;
+      const generatedResult: AppResponse<Billing | string> =
+        await this.appService.update({ ...keyRecord }, id);
+      generatedResult.status == 1
+        ? response.status(HttpStatus.OK).json(generatedResult)
+        : response
+            .status(HttpStatus.NOT_ACCEPTABLE)
+            .json({ ...generatedResult });
+    } else {
+      response
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json(new AppResponse(0, null, 'No Record Found'));
     }
   }
 }

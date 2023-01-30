@@ -87,15 +87,12 @@ export abstract class BaseService<TClass> {
     }
   }
 
-  async update(
-    record: TClass,
-    id: string,
-  ): Promise<AppResponse<string | TClass>> {
+  async update(record: any, id: string): Promise<AppResponse<string | TClass>> {
     try {
       const modifiedObject: any = this.beforeInsert(record);
       const savedObj: any = await this.model.findByIdAndUpdate(
         id,
-        modifiedObject,
+        { $set: modifiedObject },
         {
           new: true,
         },
