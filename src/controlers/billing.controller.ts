@@ -226,10 +226,10 @@ export class BillingController extends BaseController<Billing, BillingService> {
       if (record.Stotal >= record.paid + paidAmount) {
         record.paid = record.paid + paidAmount;
 
-        const { customer, ...keyRecord } = JSON.parse(JSON.stringify(record));
+        const { paid, ...keyRecord } = JSON.parse(JSON.stringify(record));
 
         const grsp: AppResponse<Billing | string> =
-          await this.appService.update({ ...keyRecord }, id);
+          await this.appService.update({ paid }, id);
         if (grsp.status == 1) {
           response
             .status(HttpStatus.OK)
