@@ -73,11 +73,14 @@ export class BillingController extends BaseController<Billing, BillingService> {
 
   getBillingNumber = async (): Promise<string> => {
     const dt: string = new Date().toISOString().split('T')[0];
+    const x = new Date(dt.toString());
+    const vs = new Date(x.getFullYear(), x.getMonth(), x.getDate(), 0, 0, 0);
+    const ve = new Date(x.getFullYear(), x.getMonth(), x.getDate(), 23, 59, 69);
 
     const filter_stage = {
       billingDate: {
-        $gte: dt + 'T00:00', //'2022-12-22T00:00',
-        $lte: dt + 'T23:59', //'2022-12-22T23:59',
+        $gte: vs.toISOString(), //'2022-12-22T00:00',
+        $lte: ve.toISOString(), //'2022-12-22T23:59',
       },
     };
     const allExistBill = await this.appService.findAll(
@@ -152,8 +155,25 @@ export class BillingController extends BaseController<Billing, BillingService> {
 
     if ((startDt && endDt) || dt) {
       if (dt) {
-        startDt = dt.toString().split('T')[0] + 'T00:00';
-        endDt = dt.toString().split('T')[0] + 'T23:59';
+        const x = new Date(dt.toString());
+        const vs = new Date(
+          x.getFullYear(),
+          x.getMonth(),
+          x.getDate(),
+          0,
+          0,
+          0,
+        );
+        const ve = new Date(
+          x.getFullYear(),
+          x.getMonth(),
+          x.getDate(),
+          23,
+          59,
+          69,
+        );
+        startDt = vs.toISOString();
+        endDt = ve.toISOString();
       }
 
       filter_stage = {
