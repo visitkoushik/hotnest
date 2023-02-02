@@ -45,6 +45,7 @@ export class MetaData {
         this.menuItems.push(new Menu('logout', 'Logout'));
         if (this.rolesShared !== Roles.EMP) {
           // this.menuItems.push(new Menu('config', 'Configure'));
+          this.menuItems.push(new Menu('transaction', 'Other Transaction'));
           this.menuItems.push(new Menu('reports', 'Reports'));
           this.menuItems.push(new Menu('customer', 'Customer'));
           this.menuItems.push(new Menu('emp', 'Employee'));

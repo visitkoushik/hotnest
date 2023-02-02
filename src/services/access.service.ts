@@ -32,6 +32,10 @@ export class AccessService {
       'CHAIN_POST',
 
       'REPORT_READ',
+
+      'TRANSACTION_GET',
+      'TRANSACTION_PUT',
+      'TRANSACTION_POST',
     ];
 
     this.accessList[Roles.ADMIN] = [
