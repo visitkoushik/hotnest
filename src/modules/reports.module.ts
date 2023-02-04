@@ -12,6 +12,7 @@ import { CustomerModule } from './customer.module';
 import { EmployeeModule } from './employee.module';
 import { ItemModule } from './item.module';
 import { LoginRegisterModule } from './login-register.module';
+import { TransactionModule } from './TransactionModule';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { LoginRegisterModule } from './login-register.module';
     CategoryModule,
     EmployeeModule,
     CustomerModule,
+    TransactionModule,
     LoginRegisterModule,
   ],
   controllers: [ReportsController],

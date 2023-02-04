@@ -135,17 +135,17 @@ export class ReportsController {
           .catch((e) => {
             response
               .status(HttpStatus.NOT_ACCEPTABLE)
-              .json(new AppResponse(1, 'Something went Wrong', null));
+              .json(new AppResponse(0, null, 'Something went Wrong'));
           });
       } else {
         response
           .status(HttpStatus.UNAUTHORIZED)
-          .json(new AppResponse(0, 'No Access to Report module', null));
+          .json(new AppResponse(0, null, 'No Access to Report module'));
       }
     } catch (e) {
       response
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .json(new AppResponse(0, e.message, null));
+        .json(new AppResponse(0, null, e.message));
     }
   }
 
@@ -178,17 +178,50 @@ export class ReportsController {
           .catch((e) => {
             response
               .status(HttpStatus.NOT_ACCEPTABLE)
-              .json(new AppResponse(1, 'Something went Wrong', null));
+              .json(new AppResponse(0, null, 'Something went Wrong'));
           });
       } else {
         response
           .status(HttpStatus.UNAUTHORIZED)
-          .json(new AppResponse(0, 'No Access to Report module', null));
+          .json(new AppResponse(0, null, 'No Access to Report module'));
       }
     } catch (e) {
       response
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .json(new AppResponse(0, e.message, null));
+        .json(new AppResponse(0, null, e.message));
+    }
+  }
+
+  @Post('overall')
+  async getOverAllReport(
+    @Res() response: Response,
+    @Req() request: Request,
+    @Headers() headers,
+  ) {
+    try {
+      const state: HeaderState = await this.CheckAccesRight(headers, response);
+      if (state == HeaderState.TRUE) {
+        this.reportService
+          .findOverAllReport(request)
+          .then((e) => {
+            response
+              .status(HttpStatus.OK)
+              .json(new AppResponse(1, [...e], null));
+          })
+          .catch((e) => {
+            response
+              .status(HttpStatus.NOT_ACCEPTABLE)
+              .json(new AppResponse(0, null, 'Something went Wrong'));
+          });
+      } else {
+        response
+          .status(HttpStatus.UNAUTHORIZED)
+          .json(new AppResponse(0, null, 'No Access to Report module'));
+      }
+    } catch (e) {
+      response
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json(new AppResponse(0, null, e.message));
     }
   }
 }

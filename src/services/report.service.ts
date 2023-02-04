@@ -11,6 +11,7 @@ import { BillingReq } from 'src/models/BillingReq';
 import { Customer, CustomerDocument } from 'src/models/Customer';
 import { ReportFilter } from 'src/models/ReportFIlter';
 import { ItemReport, ItemWiseReport, ReportResp } from 'src/models/ReportResp';
+import { Transaction } from 'src/models/Transaction';
 import { AccessService } from './access.service';
 import { BillingService } from './billing.service';
 import { CategoryService } from './categor.service';
@@ -18,6 +19,7 @@ import { CustomerService } from './customer.service';
 import { EmployeeService } from './employee.service';
 import { ItemService } from './item.service';
 import { LoginRegisterService } from './login-register.service';
+import { TransactionService } from './Transaction.service';
 enum FILTER_BY {
   DATE = 1,
   MONTH,
@@ -29,6 +31,7 @@ export class ReportService {
   constructor(
     private customerService: CustomerService,
     private readonly billService: BillingService,
+    private readonly transactionServic: TransactionService,
     private readonly loginService: LoginRegisterService,
     private readonly categoryService: CategoryService,
     private readonly iteemService: ItemService,
@@ -177,7 +180,135 @@ export class ReportService {
     });
   };
 
-  findByDateRange = async (
+  findOverAllReport = async (
+    request: Request,
+  ): Promise<
+    { detail: string; value: any; color: string; type: 'Cr' | 'Dr' }[]
+  > => {
+    return new Promise(async (res, rej) => {
+      let totalUnpaid = 0;
+      let totalSale = 0;
+      let totalPurchase = 0;
+      let indirectExpense = 0;
+      let indirectIncome = 0;
+
+      try {
+        const reportFilter: ReportFilter = request.body;
+
+        const dateRange: { start: string; end: string } = this.getDate(
+          reportFilter.startDate,
+          reportFilter.endDate,
+          reportFilter.filterDateBy,
+        );
+        const branchCode = reportFilter.branchCode || '0';
+        let filter_stage = {};
+        if (branchCode !== '0') {
+          filter_stage = {
+            ...filter_stage,
+            branchCode: {
+              $eq: branchCode,
+            },
+          };
+        }
+
+        const allBills: Billing[] = await this.findByDateRange(
+          dateRange.start,
+          dateRange.end,
+          filter_stage,
+        );
+        if (Array.isArray(allBills)) {
+          allBills.forEach((bill: Billing) => {
+            totalPurchase += bill.Ptotal;
+            totalSale += bill.Stotal;
+            totalUnpaid += bill.Stotal - bill.paid;
+          });
+        }
+
+        const allTransaction = await this.findTransactionByDateRange(
+          dateRange.start,
+          dateRange.end,
+          filter_stage,
+        );
+
+        if (Array.isArray(allTransaction)) {
+          allTransaction.forEach((trans: Transaction) => {
+            indirectExpense +=
+              trans.transactionType === 'Dr' ? trans.amount : 0;
+            indirectIncome += trans.transactionType === 'Cr' ? trans.amount : 0;
+          });
+        }
+        res([
+          {
+            detail: 'Total Purchase(-)',
+            value: totalPurchase,
+            color: '#ff0000',
+            type: 'Dr',
+          },
+          {
+            detail: 'Total Sale(+)',
+            value: totalSale,
+            color: '#00ff00',
+            type: 'Cr',
+          },
+          {
+            detail: 'Total Due(-)',
+            value: totalUnpaid,
+            color: '#ff0000',
+            type: 'Dr',
+          },
+          {
+            detail: 'Indiarect Expenses(-)',
+            value: indirectExpense,
+            color: '#ff0000',
+            type: 'Dr',
+          },
+          {
+            detail: 'Indirect Incoem(+)',
+            value: indirectIncome,
+            color: '#00ff00',
+            type: 'Cr',
+          },
+        ]);
+      } catch (e) {
+        rej(e.message);
+      }
+    });
+  };
+
+  private findTransactionByDateRange = async (
+    startDt,
+    endDt,
+    filter_stage: any,
+  ): Promise<Transaction[]> => {
+    if (startDt && endDt) {
+      // const x = new Date(startDt.toString());
+      // const vs = new Date(x.getFullYear(), x.getMonth(), x.getDate(), 0, 0, 0);
+      // const x2 = new Date(endDt.toString());
+      // const ve = new Date(
+      //   x2.getFullYear(),
+      //   x2.getMonth(),
+      //   x2.getDate(),
+      //   23,
+      //   59,
+      //   69,
+      // );
+      const startTime = 'T00:00';
+      const endTime = 'T23:59';
+
+      filter_stage = {
+        ...filter_stage,
+        transactionDate: {
+          $gte: startDt + startTime, //'2022-12-22T00:00',
+          $lte: endDt + endTime, //'2022-12-22T23:59',
+        },
+      };
+    }
+    return this.transactionServic.serviceModel.find({
+      ...filter_stage,
+    });
+  };
+
+  private findByDateRange = async (
     startDt,
     endDt,
     filter_stage: any,
@@ -206,7 +337,7 @@ export class ReportService {
       );
   };
 
-  transform(value: string, ...args: any[]): Date | undefined {
+  private transform(value: string, ...args: any[]): Date | undefined {
     if (!value) {
       return undefined;
     }
@@ -263,7 +394,7 @@ export class ReportService {
     return new Date(v.getFullYear(), v.getMonth(), v.getDate());
   }
 
-  getDate = (
+  private getDate = (
     startDate,
     endDate,
     filterDateBy,
@@ -299,7 +430,7 @@ export class ReportService {
       end.getDate().toString().padStart(2, '0');
     return { start: strStart, end: strEnd };
   };
-  filterItemReports = (
+  private filterItemReports = (
     allItems: ItemWiseReport[],
     reportFilter: ReportFilter,
   ): ItemWiseReport[] => {
@@ -373,7 +504,7 @@ export class ReportService {
     return [...finalItemWiseReport];
   };
 
-  filterAllBills = (
+  private filterAllBills = (
     allBills: Billing[],
     reportFilter: ReportFilter,
   ): BillingReport[] => {
@@ -447,7 +578,10 @@ export class ReportService {
     return billingReport;
   };
 
-  createSingleBillObj = (bills: Billing[], key: string): BillingReport => {
+  private createSingleBillObj = (
+    bills: Billing[],
+    key: string,
+  ): BillingReport => {
     const billingReport: BillingReport = {} as BillingReport;
 
     bills.forEach((b: Billing) => {
@@ -462,7 +596,7 @@ export class ReportService {
     return billingReport;
   };
 
-  createSingleItemWiseReport = (
+  private createSingleItemWiseReport = (
     bills: ItemWiseReport[],
     key: string,
   ): ItemWiseReport => {
