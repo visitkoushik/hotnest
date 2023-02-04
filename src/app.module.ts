@@ -36,9 +36,9 @@ import { TransactionModule } from './modules/TransactionModule';
     MongooseModule.forRootAsync({
       useFactory: async () => {
         return {
-          uri: 'mongodb+srv://hotnest:D0Ou3CmA0ouah0r2@cluster-hotnet.qtxxdxy.mongodb.net/default?retryWrites=true&w=majority',
+          // uri: 'mongodb+srv://hotnest:D0Ou3CmA0ouah0r2@cluster-hotnet.qtxxdxy.mongodb.net/default?retryWrites=true&w=majority',
           // Loaded from .ENV
-          // uri: process.env['MONOGO_DB'],
+          uri: process.env['MONOGO_DB'],
         };
       },
     }),
