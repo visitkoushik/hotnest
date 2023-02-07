@@ -20,6 +20,7 @@ import { ReportService } from './services/report.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BranchModule } from './modules/branch.module';
 import { TransactionModule } from './modules/TransactionModule';
+import { CryptoService } from './services/crypto.service';
 // mongodb+srv://hotnest:Passw0rd2022@cluster0.9fdjzyb.mongodb.net/?retryWrites=true&w=majority
 @Module({
   imports: [
@@ -44,7 +45,7 @@ import { TransactionModule } from './modules/TransactionModule';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, AccessService, ReportService],
-  exports: [AccessService],
+  providers: [AppService, AccessService, ReportService, CryptoService],
+  exports: [AccessService, CryptoService],
 })
 export class AppModule {}

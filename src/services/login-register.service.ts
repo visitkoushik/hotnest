@@ -6,6 +6,7 @@ import { Roles } from 'src/models/enum/Roles';
 import { Login, LoginDocument } from 'src/models/Login';
 import { LoginResp } from 'src/models/LoginResp';
 import { v4 as uuid } from 'uuid';
+import { CryptoService } from './crypto.service';
 import { EmployeeService } from './employee.service';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class LoginRegisterService {
   constructor(
     @InjectModel('Login')
     private readonly loginModel: Model<Login>,
+    private readonly cryptoService: CryptoService,
   ) {}
   get Model() {
     return this.loginModel;
@@ -117,7 +119,9 @@ export class LoginRegisterService {
       if (!logInfo) {
         throw new Error('Invalid Login');
       }
-      logInfo.authCode = uuid().replace(/-/g, '');
+      if (logInfo.authCode.trim() == '') {
+        logInfo.authCode = uuid().replace(/-/g, '');
+      }
 
       const newObj: any = new this.loginModel(logInfo);
 
