@@ -293,16 +293,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "AppComponent": () => (/* binding */ AppComponent)
 /* harmony export */ });
 /* harmony import */ var _Users_koushik_Development_chataBook_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js */ 71670);
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! tslib */ 34929);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! tslib */ 34929);
 /* harmony import */ var _app_component_html_ngResource__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app.component.html?ngResource */ 33383);
 /* harmony import */ var _app_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./app.component.scss?ngResource */ 79259);
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/common */ 94666);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/core */ 22560);
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/router */ 60124);
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @ionic/angular */ 93819);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! rxjs/operators */ 59151);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! rxjs/operators */ 86942);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! rxjs/operators */ 80522);
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/common */ 94666);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/core */ 22560);
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/router */ 60124);
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @ionic/angular */ 93819);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! rxjs/operators */ 59151);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs/operators */ 86942);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! rxjs/operators */ 80522);
 /* harmony import */ var src_model_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/model/util */ 17699);
 /* harmony import */ var _app_storage_app_storage_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app-storage/app-storage.service */ 71970);
 /* harmony import */ var _providers_cart_service_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./providers/cart-service.service */ 94422);
@@ -311,8 +311,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _providers_theme_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./providers/theme.service */ 9609);
 /* harmony import */ var _providers_utilservice_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./providers/utilservice.service */ 40847);
 /* harmony import */ var _capacitor_network__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @capacitor/network */ 54984);
-/* harmony import */ var _capacitor_splash_screen__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @capacitor/splash-screen */ 82239);
-
 
 
 
@@ -450,7 +448,6 @@ let AppComponent = class AppComponent {
       }).catch(e => {
         this.util.numberOfRecipt = 1;
       });
-      _capacitor_splash_screen__WEBPACK_IMPORTED_MODULE_11__.SplashScreen.hide();
     };
 
     this.platform.ready().then(e => {
@@ -485,13 +482,13 @@ let AppComponent = class AppComponent {
     this.theme.activeTheme('default'); // this.fetchMetaData();
 
     this.fetchTenantInfo();
-    this.router.events.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.filter)(event => event instanceof _angular_router__WEBPACK_IMPORTED_MODULE_13__.NavigationEnd), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.map)(() => this.activatedRoute), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.map)(route => {
+    this.router.events.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.filter)(event => event instanceof _angular_router__WEBPACK_IMPORTED_MODULE_12__.NavigationEnd), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.map)(() => this.activatedRoute), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.map)(route => {
       while (route.firstChild) {
         route = route.firstChild;
       }
 
       return route;
-    }), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.filter)(route => route.outlet === 'primary'), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_15__.mergeMap)(route => route.data)).subscribe(event => {
+    }), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.filter)(route => route.outlet === 'primary'), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.mergeMap)(route => route.data)).subscribe(event => {
       this.pageEvent = event;
     });
   }
@@ -499,11 +496,11 @@ let AppComponent = class AppComponent {
 };
 
 AppComponent.ctorParameters = () => [{
-  type: _angular_router__WEBPACK_IMPORTED_MODULE_13__.Router
+  type: _angular_router__WEBPACK_IMPORTED_MODULE_12__.Router
 }, {
-  type: _angular_router__WEBPACK_IMPORTED_MODULE_13__.ActivatedRoute
+  type: _angular_router__WEBPACK_IMPORTED_MODULE_12__.ActivatedRoute
 }, {
-  type: _angular_common__WEBPACK_IMPORTED_MODULE_16__.Location
+  type: _angular_common__WEBPACK_IMPORTED_MODULE_15__.Location
 }, {
   type: _providers_utilservice_service__WEBPACK_IMPORTED_MODULE_9__.UtilService
 }, {
@@ -515,12 +512,12 @@ AppComponent.ctorParameters = () => [{
 }, {
   type: _providers_theme_service__WEBPACK_IMPORTED_MODULE_8__.ThemeService
 }, {
-  type: _ionic_angular__WEBPACK_IMPORTED_MODULE_17__.Platform
+  type: _ionic_angular__WEBPACK_IMPORTED_MODULE_16__.Platform
 }, {
   type: _providers_http_service__WEBPACK_IMPORTED_MODULE_6__.HttpService
 }];
 
-AppComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_18__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_19__.Component)({
+AppComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_17__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_18__.Component)({
   selector: 'app-root',
   template: _app_component_html_ngResource__WEBPACK_IMPORTED_MODULE_1__,
   styles: [_app_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_2__]
@@ -1398,7 +1395,7 @@ let AuthGaurdService = class AuthGaurdService {
 
             _this2.router.navigate(['/login']);
           } else {
-            _this2.fetchMetaData();
+            yield _this2.fetchMetaData();
           }
 
           res(_this2.util.isLoggedIn);
@@ -2619,7 +2616,7 @@ module.exports = "/*\n * App Global CSS\n * ------------------------------------
 /***/ ((module) => {
 
 "use strict";
-module.exports = "<ion-app>\n  <ion-header\n    mode=\"ios\"\n    [ngStyle]=\"{ 'background-color': networkStatus ? 'green' : 'red' }\"\n  >\n    <ion-toolbar class=\"app-toolbar\" color=\"primary\">\n      <ion-button\n        size=\"small\"\n        class=\"menuicon\"\n        (click)=\"onBack()\"\n        *ngIf=\"pageEvent?.displayBackButton\"\n      >\n        <mat-icon end>arrow_back_ios</mat-icon>\n      </ion-button>\n      <ion-title style=\"font-size: 1.3rem;\">{{ pageEvent?.title || \"\" }}</ion-title>\n      <ion-buttons slot=\"end\">\n        <ion-button\n          class=\"menuicon\"\n          *ngIf=\"!util.isLoggedIn && pageEvent?.hideLogin !== true\"\n          routerLink=\"/login\"\n        >\n          <mat-icon end>lock</mat-icon>\n        </ion-button>\n        <ion-button\n          class=\"menuicon\"\n          *ngIf=\"util.isLoggedIn && pageEvent?.hideLogin !== true\"\n        >\n          <mat-icon end>lock_open</mat-icon>\n        </ion-button>\n        <ion-menu-button\n          menu=\"main-menu\"\n          *ngIf=\"pageEvent?.hideMenu !== true\"\n        ></ion-menu-button>\n      </ion-buttons>\n    </ion-toolbar>\n    <mat-progress-bar\n      mode=\"indeterminate\"\n      *ngIf=\"util.isLoading\"\n    ></mat-progress-bar>\n    <div *ngIf=\"showNetworkStatus\" class=\"header\">{{ networkMessage }}</div>\n  </ion-header>\n  <ion-menu menuId=\"main-menu\" contentId=\"main\" side=\"end\">\n    <ion-content>\n      <div class=\"menuheader\">\n        <!-- <div class=\"menuheadercontent\"> -->\n        <img src=\"./assets/icon.png\" />\n        <!-- </div> -->\n      </div>\n      <img src=\"./assets/name.png\" class=\"imgtext\" />\n\n      <div class=\"menu-item\">\n        <ion-list class=\"menuList\">\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'bill'\">\n            <ion-item routerLink=\"/tab\" routerLinkActive=\"active\">\n              <mat-icon>create</mat-icon>\n              {{ util.metaData?.menuItems | menu : \"bill\" : \"true\" }}\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'transaction'\">\n            <ion-item routerLink=\"/other-expenses\" routerLinkActive=\"active\">\n              <mat-icon>view_list</mat-icon>\n              {{ util.metaData?.menuItems | menu : \"transaction\" : \"true\" }}\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'item'\">\n            <ion-item routerLink=\"/tab-item\" routerLinkActive=\"active\">\n              <mat-icon>view_list</mat-icon>\n              {{ util.metaData?.menuItems | menu : \"item\" : \"true\" }}\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'config'\">\n            <ion-item routerLink=\"/configures\" routerLinkActive=\"active\">\n              <mat-icon>view_module</mat-icon>\n              <span>\n                {{ util.metaData?.menuItems | menu : \"config\" : \"true\" }}</span\n              >\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'reports'\">\n            <ion-item routerLink=\"/reports\" routerLinkActive=\"active\">\n              <mat-icon>report</mat-icon>\n              <span>{{\n                util.metaData?.menuItems | menu : \"reports\" : \"true\"\n              }}</span>\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle\n            *ngIf=\"util.metaData?.menuItems | menu : 'appsettings'\"\n          >\n            <ion-item routerLink=\"/appsetting\" routerLinkActive=\"active\">\n              <mat-icon>settings</mat-icon>\n              <span>{{\n                util.metaData?.menuItems | menu : \"appsettings\" : \"true\"\n              }}</span>\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'emp'\">\n            <ion-item routerLink=\"/employee-tab\" routerLinkActive=\"active\">\n              <mat-icon>create</mat-icon>\n              {{ util.metaData?.menuItems | menu : \"emp\" : \"true\" }}\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'profile'\">\n            <mat-divider></mat-divider>\n            <ion-item routerLink=\"/profile\" routerLinkActive=\"active\">\n              <mat-icon>person</mat-icon>\n              {{ util.metaData?.menuItems | menu : \"profile\" : \"true\" }}\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'branch'\">\n            <mat-divider></mat-divider>\n            <ion-item routerLink=\"/branch-tab\" routerLinkActive=\"active\">\n              <mat-icon>table_chart</mat-icon>\n              {{ util.metaData?.menuItems | menu : \"branch\" : \"true\" }}\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle>\n            <mat-divider></mat-divider>\n            <ion-item (click)=\"appLogout()\" [disabled]=\"!util.isLoggedIn\">\n              <mat-icon>exit_to_app</mat-icon>\n              <span>LogOut</span>\n            </ion-item>\n          </ion-menu-toggle>\n        </ion-list>\n      </div>\n    </ion-content>\n    <ion-footer>\n      <ion-item *ngIf=\"this.util.metaData?.profile\"\n        >{{ this.util.metaData.profile.gender | formatgender }}\n        {{ this.util.metaData.profile.firstName.charAt(0) }}.{{\n          this.util.metaData.profile.middleName\n            ? this.util.metaData.profile.middleName.charAt(0) + \".\"\n            : \"\"\n        }}\n        {{ this.util.metaData.profile.lastName }}</ion-item\n      >\n    </ion-footer>\n  </ion-menu>\n\n  <ion-content>\n    <ion-router-outlet id=\"main\"></ion-router-outlet>\n  </ion-content>\n</ion-app>\n";
+module.exports = "<ion-app>\n  <ion-header\n    mode=\"ios\"\n    [ngStyle]=\"{ 'background-color': networkStatus ? 'green' : 'red' }\"\n  >\n    <ion-toolbar class=\"app-toolbar\" color=\"primary\">\n      <ion-button\n        size=\"small\"\n        class=\"menuicon\"\n        (click)=\"onBack()\"\n        *ngIf=\"pageEvent?.displayBackButton\"\n      >\n        <mat-icon end>arrow_back_ios</mat-icon>\n      </ion-button>\n      <ion-title>{{ pageEvent?.title || \"\" }}</ion-title>\n      <ion-buttons slot=\"end\">\n        <ion-button\n          class=\"menuicon\"\n          *ngIf=\"!util.isLoggedIn && pageEvent?.hideLogin !== true\"\n          routerLink=\"/login\"\n        >\n          <mat-icon end>lock</mat-icon>\n        </ion-button>\n        <ion-button\n          class=\"menuicon\"\n          *ngIf=\"util.isLoggedIn && pageEvent?.hideLogin !== true\"\n        >\n          <mat-icon end>lock_open</mat-icon>\n        </ion-button>\n        <ion-menu-button\n          menu=\"main-menu\"\n          *ngIf=\"pageEvent?.hideMenu !== true\"\n        ></ion-menu-button>\n      </ion-buttons>\n    </ion-toolbar>\n    <mat-progress-bar\n      mode=\"indeterminate\"\n      *ngIf=\"util.isLoading\"\n    ></mat-progress-bar>\n    <div *ngIf=\"showNetworkStatus\" class=\"header\">{{ networkMessage }}</div>\n  </ion-header>\n  <ion-menu menuId=\"main-menu\" contentId=\"main\" side=\"end\">\n    <ion-content>\n      <div class=\"menuheader\">\n        <!-- <div class=\"menuheadercontent\"> -->\n        <img src=\"./assets/icon.png\" />\n        <!-- </div> -->\n      </div>\n      <img src=\"./assets/name.png\" class=\"imgtext\" />\n\n      <div class=\"menu-item\">\n        <ion-list class=\"menuList\">\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'bill'\">\n            <ion-item routerLink=\"/tab\" routerLinkActive=\"active\">\n              <mat-icon>create</mat-icon>\n              {{ util.metaData?.menuItems | menu : \"bill\" : \"true\" }}\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'transaction'\">\n            <ion-item routerLink=\"/other-expenses\" routerLinkActive=\"active\">\n              <mat-icon>view_list</mat-icon>\n              {{ util.metaData?.menuItems | menu : \"transaction\" : \"true\" }}\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'item'\">\n            <ion-item routerLink=\"/tab-item\" routerLinkActive=\"active\">\n              <mat-icon>view_list</mat-icon>\n              {{ util.metaData?.menuItems | menu : \"item\" : \"true\" }}\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'config'\">\n            <ion-item routerLink=\"/configures\" routerLinkActive=\"active\">\n              <mat-icon>view_module</mat-icon>\n              <span>\n                {{ util.metaData?.menuItems | menu : \"config\" : \"true\" }}</span\n              >\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'reports'\">\n            <ion-item routerLink=\"/reports\" routerLinkActive=\"active\">\n              <mat-icon>report</mat-icon>\n              <span>{{\n                util.metaData?.menuItems | menu : \"reports\" : \"true\"\n              }}</span>\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle\n            *ngIf=\"util.metaData?.menuItems | menu : 'appsettings'\"\n          >\n            <ion-item routerLink=\"/appsetting\" routerLinkActive=\"active\">\n              <mat-icon>settings</mat-icon>\n              <span>{{\n                util.metaData?.menuItems | menu : \"appsettings\" : \"true\"\n              }}</span>\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'emp'\">\n            <ion-item routerLink=\"/employee-tab\" routerLinkActive=\"active\">\n              <mat-icon>create</mat-icon>\n              {{ util.metaData?.menuItems | menu : \"emp\" : \"true\" }}\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'profile'\">\n            <mat-divider></mat-divider>\n            <ion-item routerLink=\"/profile\" routerLinkActive=\"active\">\n              <mat-icon>person</mat-icon>\n              {{ util.metaData?.menuItems | menu : \"profile\" : \"true\" }}\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle *ngIf=\"util.metaData?.menuItems | menu : 'branch'\">\n            <mat-divider></mat-divider>\n            <ion-item routerLink=\"/branch-tab\" routerLinkActive=\"active\">\n              <mat-icon>table_chart</mat-icon>\n              {{ util.metaData?.menuItems | menu : \"branch\" : \"true\" }}\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-menu-toggle>\n            <mat-divider></mat-divider>\n            <ion-item (click)=\"appLogout()\" [disabled]=\"!util.isLoggedIn\">\n              <mat-icon>exit_to_app</mat-icon>\n              <span>LogOut</span>\n            </ion-item>\n          </ion-menu-toggle>\n        </ion-list>\n      </div>\n    </ion-content>\n    <ion-footer>\n      <ion-item *ngIf=\"this.util.metaData?.profile\"\n        >{{ this.util.metaData.profile.gender | formatgender }}\n        {{ this.util.metaData.profile.firstName.charAt(0) }}.{{\n          this.util.metaData.profile.middleName\n            ? this.util.metaData.profile.middleName.charAt(0) + \".\"\n            : \"\"\n        }}\n        {{ this.util.metaData.profile.lastName }}</ion-item\n      >\n    </ion-footer>\n  </ion-menu>\n\n  <ion-content> <ion-router-outlet id=\"main\"></ion-router-outlet></ion-content>\n</ion-app>\n";
 
 /***/ })
 
