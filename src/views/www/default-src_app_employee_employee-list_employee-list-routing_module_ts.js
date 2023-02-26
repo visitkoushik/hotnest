@@ -105,6 +105,7 @@ let EmployeeListPage = class EmployeeListPage {
         this.router.events.subscribe((event) => {
             if (event instanceof _angular_router__WEBPACK_IMPORTED_MODULE_6__.NavigationStart &&
                 event.url.startsWith('/employee-tab/list')) {
+                this.utilSrvc.branchCode = '0';
                 // this.util.isLoading = true;
                 this.fetchAllEmployee();
             }

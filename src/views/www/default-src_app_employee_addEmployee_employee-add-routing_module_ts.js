@@ -81,7 +81,10 @@ let EmployeeAddPage = class EmployeeAddPage {
         this.emp = {};
         this.isSubmitted = false;
         this.isValid = () => {
-            return this.ionicForm.valid && this.utilsrvc.branchCode !== '0';
+            return (this.ionicForm.valid &&
+                (this.utilsrvc.branchCode !== '0' ||
+                    this.ionicForm.get('roles').value.toString().toLowerCase() == 'superadmin') &&
+                this.ionicForm.get('passcode').value.toString() == this.ionicForm.get('passRept').value.toString());
         };
     }
     onBranchChanged() {

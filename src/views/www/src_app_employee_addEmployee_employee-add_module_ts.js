@@ -20,7 +20,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _employee_add_page__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./employee-add.page */ 10228);
 /* harmony import */ var _material_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../material.module */ 63806);
 /* harmony import */ var _pipe_pipe_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../pipe/pipe.module */ 23493);
-/* harmony import */ var src_app_branch_selector_branch_selector_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/branch-selector/branch-selector.module */ 88099);
+/* harmony import */ var _branch_selector_branch_selector_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../branch-selector/branch-selector.module */ 88099);
 
 
 
@@ -42,7 +42,7 @@ EmployeeAddPageModule = (0,tslib__WEBPACK_IMPORTED_MODULE_5__.__decorate)([
             _angular_forms__WEBPACK_IMPORTED_MODULE_8__.ReactiveFormsModule,
             _material_module__WEBPACK_IMPORTED_MODULE_2__.MaterialModule,
             _pipe_pipe_module__WEBPACK_IMPORTED_MODULE_3__.PipeModule,
-            src_app_branch_selector_branch_selector_module__WEBPACK_IMPORTED_MODULE_4__.BranchSelectorModule,
+            _branch_selector_branch_selector_module__WEBPACK_IMPORTED_MODULE_4__.BranchSelectorModule,
             _employee_add_routing_module__WEBPACK_IMPORTED_MODULE_0__.EmployeeAddPageRoutingModule,
         ],
         declarations: [_employee_add_page__WEBPACK_IMPORTED_MODULE_1__.EmployeeAddPage],

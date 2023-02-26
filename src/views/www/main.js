@@ -91,13 +91,17 @@ const routes = [
         loadChildren: () => Promise.all(/*! import() */[__webpack_require__.e("default-src_app_branch-selector_branch-selector_module_ts"), __webpack_require__.e("default-src_app_employee_employee-list_employee-list-routing_module_ts"), __webpack_require__.e("src_app_employee_employee-list_employee-list_module_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./employee/employee-list/employee-list.module */ 16954)).then((m) => m.EmployeeListPageModule),
     },
     {
+        path: 'employee-update',
+        loadChildren: () => Promise.all(/*! import() */[__webpack_require__.e("default-src_app_branch-selector_branch-selector_module_ts"), __webpack_require__.e("default-src_app_employee_update-employee_update-employee-routing_module_ts"), __webpack_require__.e("src_app_employee_update-employee_update-employee_module_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./employee/update-employee/update-employee.module */ 64552)).then((m) => m.UpdateEmployeePageModule),
+    },
+    {
         path: 'profile',
         loadChildren: () => __webpack_require__.e(/*! import() */ "src_app_profile_profile_module_ts").then(__webpack_require__.bind(__webpack_require__, /*! ./profile/profile.module */ 84523)).then((m) => m.ProfilePageModule),
         canLoad: [_providers_auth_auth_gaurd_service__WEBPACK_IMPORTED_MODULE_1__.AuthGaurdService],
     },
     {
         path: 'employee-tab',
-        loadChildren: () => __webpack_require__.e(/*! import() */ "src_app_employee_employee-tab_employee-tab_module_ts").then(__webpack_require__.bind(__webpack_require__, /*! ./employee/employee-tab/employee-tab.module */ 65749)).then((m) => m.EmployeeTabPageModule),
+        loadChildren: () => Promise.all(/*! import() */[__webpack_require__.e("default-src_app_branch-selector_branch-selector_module_ts"), __webpack_require__.e("src_app_employee_employee-tab_employee-tab_module_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./employee/employee-tab/employee-tab.module */ 65749)).then((m) => m.EmployeeTabPageModule),
         canLoad: [_providers_auth_auth_gaurd_service__WEBPACK_IMPORTED_MODULE_1__.AuthGaurdService],
     },
     {

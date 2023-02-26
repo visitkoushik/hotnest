@@ -45,8 +45,7 @@ let BranchSelectorComponent = BranchSelectorComponent_1 = class BranchSelectorCo
         this.onChange = fn;
         this.touched = true;
     }
-    registerOnTouched(fn) {
-    }
+    registerOnTouched(fn) { }
     setDisabledState(isDisabled) {
         this.disabled = isDisabled;
     }
@@ -75,8 +74,8 @@ BranchSelectorComponent = BranchSelectorComponent_1 = (0,tslib__WEBPACK_IMPORTED
             {
                 provide: _angular_forms__WEBPACK_IMPORTED_MODULE_6__.NG_VALUE_ACCESSOR,
                 multi: true,
-                useExisting: BranchSelectorComponent_1
-            }
+                useExisting: BranchSelectorComponent_1,
+            },
         ],
         styles: [_branch_selector_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1__]
     })

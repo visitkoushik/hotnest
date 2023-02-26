@@ -18,10 +18,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @ionic/angular */ 93819);
 /* harmony import */ var _update_employee_routing_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./update-employee-routing.module */ 13711);
 /* harmony import */ var _update_employee_page__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./update-employee.page */ 9873);
-/* harmony import */ var src_app_material_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/material.module */ 63806);
-/* harmony import */ var src_app_pipe_pipe_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/pipe/pipe.module */ 23493);
-/* harmony import */ var _reset_password_reset_password_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./reset-password/reset-password.component */ 54680);
-/* harmony import */ var src_app_branch_selector_branch_selector_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/branch-selector/branch-selector.module */ 88099);
+/* harmony import */ var _reset_password_reset_password_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./reset-password/reset-password.component */ 54680);
+/* harmony import */ var _material_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../material.module */ 63806);
+/* harmony import */ var _pipe_pipe_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../pipe/pipe.module */ 23493);
+/* harmony import */ var _branch_selector_branch_selector_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../branch-selector/branch-selector.module */ 88099);
 
 
 
@@ -42,12 +42,12 @@ UpdateEmployeePageModule = (0,tslib__WEBPACK_IMPORTED_MODULE_6__.__decorate)([
             _angular_forms__WEBPACK_IMPORTED_MODULE_9__.FormsModule,
             _ionic_angular__WEBPACK_IMPORTED_MODULE_10__.IonicModule,
             _angular_forms__WEBPACK_IMPORTED_MODULE_9__.ReactiveFormsModule,
-            src_app_material_module__WEBPACK_IMPORTED_MODULE_2__.MaterialModule,
-            src_app_pipe_pipe_module__WEBPACK_IMPORTED_MODULE_3__.PipeModule,
-            src_app_branch_selector_branch_selector_module__WEBPACK_IMPORTED_MODULE_5__.BranchSelectorModule,
-            _update_employee_routing_module__WEBPACK_IMPORTED_MODULE_0__.UpdateEmployeePageRoutingModule
+            _material_module__WEBPACK_IMPORTED_MODULE_3__.MaterialModule,
+            _pipe_pipe_module__WEBPACK_IMPORTED_MODULE_4__.PipeModule,
+            _branch_selector_branch_selector_module__WEBPACK_IMPORTED_MODULE_5__.BranchSelectorModule,
+            _update_employee_routing_module__WEBPACK_IMPORTED_MODULE_0__.UpdateEmployeePageRoutingModule,
         ],
-        declarations: [_update_employee_page__WEBPACK_IMPORTED_MODULE_1__.UpdateEmployeePage, _reset_password_reset_password_component__WEBPACK_IMPORTED_MODULE_4__.ResetPasswordComponent]
+        declarations: [_update_employee_page__WEBPACK_IMPORTED_MODULE_1__.UpdateEmployeePage, _reset_password_reset_password_component__WEBPACK_IMPORTED_MODULE_2__.ResetPasswordComponent],
     })
 ], UpdateEmployeePageModule);
 

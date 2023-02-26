@@ -39,6 +39,7 @@ EmployeeListPageModule = (0,tslib__WEBPACK_IMPORTED_MODULE_5__.__decorate)([
             _angular_common__WEBPACK_IMPORTED_MODULE_7__.CommonModule,
             _angular_forms__WEBPACK_IMPORTED_MODULE_8__.FormsModule,
             _ionic_angular__WEBPACK_IMPORTED_MODULE_9__.IonicModule,
+            _angular_forms__WEBPACK_IMPORTED_MODULE_8__.ReactiveFormsModule,
             src_app_material_module__WEBPACK_IMPORTED_MODULE_2__.MaterialModule,
             src_app_pipe_pipe_module__WEBPACK_IMPORTED_MODULE_3__.PipeModule,
             src_app_branch_selector_branch_selector_module__WEBPACK_IMPORTED_MODULE_4__.BranchSelectorModule,
